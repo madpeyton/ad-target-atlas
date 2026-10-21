@@ -1,0 +1,33 @@
+# AD Target Atlas
+
+Results from the TREAT-AD snRNA-seq pipeline.
+
+> Alzheimer's disease (AD) gene and drug candidates from single-nucleus RNA-seq of human prefrontal cortex (ROSMAP), produced by the TREAT-AD v2 pipeline. Computational predictions to guide follow-up experiments, not validated targets or treatments.
+
+## Datasets
+
+- Green et al. 2024 (`green`): Single-nucleus RNA sequencing of dorsolateral prefrontal cortex from donors in the Religious Orders Study and Rush Memory and Aging Project (Green et al., Nature 2024). AD here means Braak stage 5-6 and control Braak stage 0-2; donors at Braak 3-4 are not analyzed. DESeq2 design `~ sex + condition`.
+- Mathys et al. 2019 (`mathys2019`): Single-nucleus RNA sequencing of prefrontal cortex from donors in the Religious Orders Study and Rush Memory and Aging Project (Mathys et al., Nature 2019). AD here means a pathological diagnosis of Alzheimer's disease. DESeq2 design `~ condition`.
+
+## Tests
+
+- Nucleus-level test (main columns): Wilcoxon rank-sum over nuclei of AD vs control donors within a cell type; genes detected in >= 10% of nuclei of either group; Benjamini-Hochberg per cell type; significant at adjusted p < 0.05. Does not account for donors, so p-values are much smaller than a donor-level test gives.
+- Donor-level (pseudobulk) test: DESeq2 Wald test on counts summed per donor and cell type; Benjamini-Hochberg with independent filtering per cell type; significant at adjusted p < 0.05.
+- Co-expression modules (hdWGCNA; module AD association by Wilcoxon over donors), AD-likeness (DEGAS, trained on MSBB bulk RNA-seq), drug scores (DrugCLIP z-scores; rankings, not tests).
+
+## Files
+
+- [Methods](https://madpeyton.github.io/ad-target-atlas/methods.md): which test produced each result, thresholds, multiple-testing correction
+- [Data dictionary](https://madpeyton.github.io/ad-target-atlas/data_dictionary.md): every column
+- [results.csv](https://madpeyton.github.io/ad-target-atlas/downloads/results.csv) / [results.json](https://madpeyton.github.io/ad-target-atlas/downloads/results.json): every gene x cell type x dataset tested by either test
+- [Gene index](https://madpeyton.github.io/ad-target-atlas/genes/index.html): 16,776 gene pages at https://madpeyton.github.io/ad-target-atlas/genes/<SYMBOL>/ with JSON at https://madpeyton.github.io/ad-target-atlas/genes/<SYMBOL>/<SYMBOL>.json
+- [Version stamp](https://madpeyton.github.io/ad-target-atlas/downloads/stamp.json)
+- [Sitemap](https://madpeyton.github.io/ad-target-atlas/sitemap.xml)
+
+## License and attribution
+
+- License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/).
+- The results published here are in whole or in part based on data obtained from the AD Knowledge Portal (NIH-NIA, U24AG061340).
+- Study acknowledgments and data availability: https://madpeyton.github.io/ad-target-atlas/methods.html#attribution
+
+build_site_pages v1.10; build date in https://madpeyton.github.io/ad-target-atlas/downloads/stamp.json; inputs sha256 5ef5c884de63

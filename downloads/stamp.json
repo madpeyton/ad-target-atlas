@@ -1,0 +1,840 @@
+{
+ "last_updated": "2026-10-21",
+ "site_build": {
+  "build_site_pages": "1.10",
+  "build_site_data": {
+   "green": "1.12",
+   "mathys2019": "1.12"
+  }
+ },
+ "treatad_snrna_commit": "8cac21cb0be8540c0551579f9bf26266d91f3093",
+ "commit_note": "commit of the pipeline code repository when the site was built; it may not match the code version that produced the results",
+ "inputs_sha256_combined": "5ef5c884de63cd3b66d8a61cd11d3c2f34ee16cd25363987de5252fec5f30792",
+ "skipped_datasets": [],
+ "license": "CC BY-NC 4.0",
+ "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+ "inputs": [
+  {
+   "dataset": "green",
+   "file": "config/green.yaml",
+   "sha256": "efc9303b63333f726a1c5df496cec41e3dba94cb23173b89b80cfc86993443c6",
+   "bytes": 10131
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/Astrocytes/de_results.tsv",
+   "sha256": "5e5f50a83d7c51d11fb4495ff14fe6bda5d7e433943fcdbaabfabb6c1501b150",
+   "bytes": 2266134
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/CUX2+/de_results.tsv",
+   "sha256": "4ad5c3c5128f693f787b92b830245dadccadb6d469ec1651939b9c715a1b356f",
+   "bytes": 2636503
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/CUX2-/de_results.tsv",
+   "sha256": "f7382e65c9e48b1a0c4f027ed225349b08c46f7e666451267baea7d5b22ce125",
+   "bytes": 2666093
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/Inhibitory/de_results.tsv",
+   "sha256": "8abdbf52ea7bc3d800037d0389a343725e16557dbd9639251b6419e5ae14757b",
+   "bytes": 2446646
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/Microglia/de_results.tsv",
+   "sha256": "4c8c3d8552ca571d2c1afa267b4279c844e91331b41466c583deb13ab38346d1",
+   "bytes": 1605852
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/Oligodendroglia/de_results.tsv",
+   "sha256": "19e2a40f7024fba615060f1658bcb02c3c22eba0c0b9333c63972278f9b40bff",
+   "bytes": 2343507
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/Vascular.niche/de_results.tsv",
+   "sha256": "e9587bad11df2f149fcd466cadc62648e7c2f60bf076b6c56622d11f4e3a849c",
+   "bytes": 884349
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11_differential_expression/green_11_de_summary.tsv",
+   "sha256": "eae85f6b618837ff68b74481aa277ad5d30822596a8ba46ead03991f80429f68",
+   "bytes": 403
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/Astrocytes/de_results.tsv",
+   "sha256": "1e5bb0057208b8138f2d9269a3b6774ab83ef404d8ef453f7c4d42538e5c8161",
+   "bytes": 1048446
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/CUX2+/de_results.tsv",
+   "sha256": "f5e4aca1b82c95647c14b4ae07120d7b14d510a332f08c2ed8534b29b1fd3331",
+   "bytes": 1481335
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/CUX2-/de_results.tsv",
+   "sha256": "351f27332f33237993efc7f846b061eee1ef5cae3f817eaa37064d6658d640eb",
+   "bytes": 1497333
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/Inhibitory/de_results.tsv",
+   "sha256": "06dd2d4e3974da6e389bef017acdd4f6cd37b680758b6996a0087b7dbdbeedcf",
+   "bytes": 1279369
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/Microglia/de_results.tsv",
+   "sha256": "591ef06fea262e9260e0be53acd0eb158627e36b334c6ced51b0d3dc1b108370",
+   "bytes": 800006
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/Oligodendroglia/de_results.tsv",
+   "sha256": "22ac88ff550d72cc1a0190ecd4a5dd8472b0c430fb6bd7443f39a9e7972c90dd",
+   "bytes": 887455
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/Vascular.niche/de_results.tsv",
+   "sha256": "3fc5e265a69b257f6f5c96f35b48bc5072662391a3419b09e76011a91333329a",
+   "bytes": 998593
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/11b_wilcoxon_de/green_11b_comparison.tsv",
+   "sha256": "eecfdbf710f3be707e4e2832fd68d63046853928bdfc56047022ce20b071499e",
+   "bytes": 619
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Astrocytes/hub_genes.tsv",
+   "sha256": "3174822b95082e2d99513231eef5a3c59853234c738ad7a0bcb3d5c110995e21",
+   "bytes": 3751
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Astrocytes/module_association.tsv",
+   "sha256": "86fdf46fcac013993315e2605b70e1469ebd3f1c5ae1bdb6b94025ff1c33a09e",
+   "bytes": 2014
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Astrocytes/modules.tsv",
+   "sha256": "fd13f31e34563d47e9c506f9ba6c674d5e5d8b2fdb2c1b7b3e62c344f9dc53de",
+   "bytes": 515874
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/CUX2+/hub_genes.tsv",
+   "sha256": "19e8fbcc962337321f32715f4a9b29a65882cec8aa35e4fbcff82ef5ffe384fd",
+   "bytes": 4707
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/CUX2+/module_association.tsv",
+   "sha256": "b2c28eaf910b9cdc9ef508cb6aaaa6f0a34a1609b6e90dd930c79f70dbe8bb3d",
+   "bytes": 2437
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/CUX2+/modules.tsv",
+   "sha256": "3597162b4ca62523fe1522d882988f380deb68aac8df7221d6f74dbea7d64e45",
+   "bytes": 619635
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/CUX2-/hub_genes.tsv",
+   "sha256": "c2e1dfcaaa66b59d043352c9ff5d2b8ede8b358a024630baf7229c65ecf5cdeb",
+   "bytes": 5251
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/CUX2-/module_association.tsv",
+   "sha256": "23ed72738b2fb81437e63be4d1145c8163362f54834f2fb37f04322843840286",
+   "bytes": 2725
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/CUX2-/modules.tsv",
+   "sha256": "caf27a5e1790bc8c11d47d3002df70c148efe5138a59fbaea112f343561ad718",
+   "bytes": 644739
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Inhibitory/hub_genes.tsv",
+   "sha256": "006c7ce19b746d9e78b201be17518de42870704ac9ab6442773cc14ddbd3c3a1",
+   "bytes": 5678
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Inhibitory/module_association.tsv",
+   "sha256": "f4e7a04c9cfe10107e865f7df3968ad0fa811e23e54fb77ed7df57d81979dc39",
+   "bytes": 2871
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Inhibitory/modules.tsv",
+   "sha256": "f2375bcae66828d31e40be95b149e9ebd1c9d39ba1d8df562c17cfc5af95013f",
+   "bytes": 570142
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Microglia/hub_genes.tsv",
+   "sha256": "31fc29cfecd2218e79b22b0493f107f9de423f6984a21dd40bba626eb41c7d38",
+   "bytes": 2382
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Microglia/module_association.tsv",
+   "sha256": "350e60c07f284dd227ed480e826542d3103724c3a85e2bf6c2674c6a5451ddbb",
+   "bytes": 1333
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Microglia/modules.tsv",
+   "sha256": "a0cf5e8967d8b8d55de03b93a2736c3a54b1015956f36392231f58310d9fb127",
+   "bytes": 435662
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Oligodendroglia/hub_genes.tsv",
+   "sha256": "55406cb01d6258902001a2337cbe75d0dde31956b48a4c54db42ceaf702f8596",
+   "bytes": 2393
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Oligodendroglia/module_association.tsv",
+   "sha256": "d43283c8cd70f78d2b26c05b1c14d979f297621189ff0656b6ef5e4f5c806f38",
+   "bytes": 1351
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Oligodendroglia/modules.tsv",
+   "sha256": "479c5445e9c5d2e50849fd73dcb28b3a6d5c8789b670437f04ee12f66c298dd4",
+   "bytes": 453160
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Vascular.niche/hub_genes.tsv",
+   "sha256": "8fd2291ddb7c8115e65789d5694349d73f1b04b7b704805f924e10720cebdcb1",
+   "bytes": 4678
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Vascular.niche/module_association.tsv",
+   "sha256": "ee18138d1ae1dc3985164778fb2b320081411f7d875624e1c88ddf69dd1f36ab",
+   "bytes": 2483
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/Vascular.niche/modules.tsv",
+   "sha256": "92b50a57d3334c0fcaa01c0df6e40c18c09c314950807d4f9dcdebfefc45798f",
+   "bytes": 504632
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/12_coexpression/green_12_summary.tsv",
+   "sha256": "e6804ace1a6213cf6518244e1db69bbf69c8720f4aab7ed1c226da81f3031799",
+   "bytes": 880
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13_degas/green_13_celltype_summary.tsv",
+   "sha256": "10c29e7abea462a9846845520f6fc12a3e5544270fe96b5bbf333ae94dd3913e",
+   "bytes": 749
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13_degas/green_13_cv_metrics.tsv",
+   "sha256": "72da2a4ac99b94c479d9bb7d475e2bb733b7494b1d2436ca3a7fd6b2bf0b2c47",
+   "bytes": 1728
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13_degas/green_13_donor_association.tsv",
+   "sha256": "1a998b0d3f8d7d1a714d24400259f6f81532bb77ca7ca22b3251050d1f6ba75c",
+   "bytes": 1074
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13_degas/green_13_selected_genes.tsv",
+   "sha256": "3a61b9f10c479824721a00520f76d6106237796384c3870ea466ba197cc023cf",
+   "bytes": 29841
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_control_check.tsv",
+   "sha256": "dc056f98e30475a11fb588205efb9d87cefe7d5a678c606d1cb60bc29f25bec5",
+   "bytes": 305
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_genomescreen_coverage.tsv",
+   "sha256": "c1fb167dc88f82a2c6487821448ea208d02b3f2cd27545303e56be00fe529799",
+   "bytes": 13783
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_genomescreen_hits.tsv",
+   "sha256": "dca20401604dd14f5ab48fa5472da6201c321599bddecc90c7930b5ba73ec810",
+   "bytes": 102556
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_holo_structures.tsv",
+   "sha256": "92ce9ba230add778de47eb77e5e8011858d61300665edf924aad07ae2b29758b",
+   "bytes": 5159
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_not_scored.tsv",
+   "sha256": "c315e97eecef32c8c61aaaf50ded0959e7cb7cd67e8206d0e1c47e15ae78e0d7",
+   "bytes": 65811
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_APOE__P02649.tsv",
+   "sha256": "b56edad394d75f4361a039f631f745c2ff8038222f89e31685819d130abef6c6",
+   "bytes": 135106
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_BCHE__P06276.tsv",
+   "sha256": "005e56fe91429e569858b6c4ecd41bc51edec944d1b51f11489439041652f600",
+   "bytes": 158913
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_CACNA1A__O00555.tsv",
+   "sha256": "7d6f57dc03ebaa8d74f36744b2ab3ce42acc616b4f29f85e942b8d99a86974c9",
+   "bytes": 115426
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_CALM1__P0DP23.tsv",
+   "sha256": "3eb190644881e3697eca233fd5e7213b81305cc8e4b5d8a63a06350b97196831",
+   "bytes": 200582
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_CALM1__P0DP25.tsv",
+   "sha256": "9f31818a308ed290fe174fab2629aaedb168707721ba60b7d9e4ba0a5bc640f8",
+   "bytes": 176421
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_FTH1__P02794.tsv",
+   "sha256": "3043a79d7a0971404327babbe2538b1b253ea4e6d84589ee3a6a926c98d40a4e",
+   "bytes": 156512
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_HTR2A__P28223.tsv",
+   "sha256": "2d666d175a55a847abb4d0987bc81f97aab5e49ed9eb8ffb6040e3c095849573",
+   "bytes": 156276
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_HTR2A_authors_holo.tsv",
+   "sha256": "580b3398153006106fb1d0e3494429d0d482101ead099c96d997a4da32471404",
+   "bytes": 138412
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_MRAS__O14807.tsv",
+   "sha256": "96bdb40ac55dff9d1859688d3dffd879b5556cb44aa6ea48a18d20c1785ca3f6",
+   "bytes": 244413
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_PFKP__Q01813.tsv",
+   "sha256": "3c2634ef1986934be012ecd266c51c5deac6bb9e6eea8125efc52a7e74556b4e",
+   "bytes": 309112
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_PTPRG__P23470.tsv",
+   "sha256": "2507ebe972c605734f1300ae2623c70be04cded5bac96f8a9576a3127cabb5ad",
+   "bytes": 181719
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_QDPR__P09417.tsv",
+   "sha256": "e44ce03a661e775c81d4c2d37c5eedda286a2a1165b527d8110d080fc306e657",
+   "bytes": 115015
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_SYN3__O14994.tsv",
+   "sha256": "c92edb7767c9c39ceeef42dce9958cccd95f0108a4ee022b4108f8afc266990c",
+   "bytes": 137680
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_SYT1__J3KQA0.tsv",
+   "sha256": "868e3b1c12335e4af3fa0d4f7fda326c7d19f3587e4aa70bcedbdd57b7df97a4",
+   "bytes": 115984
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_scores_UCHL1__P09936.tsv",
+   "sha256": "7792b74fcfbfab4f92043a3ad0b64a554f7bc2df7e67dd1ab00e09b74234237c",
+   "bytes": 569439
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_target_mapping.tsv",
+   "sha256": "4b398108486dab0695ba81a61dba78c253767a7aa5f4ab921f01c74b663626c6",
+   "bytes": 7280
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/14_drugclip/green_14_targets.tsv",
+   "sha256": "4bf42683dbf629b53a50a83e74b2cd23c4a8f23a823b39f451caeec8dad393f3",
+   "bytes": 7676
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/chembl_moa.tsv",
+   "sha256": "e770cff717ea7d9ce84c0397b4bc3c5f4523276e1b37ca0969665b1ed35cd4b7",
+   "bytes": 26881
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/target_known_actives.tsv",
+   "sha256": "1e254435aecaf8939e05f72cb2e51e1e16655dcae7fc51e7c563a24de070c74f",
+   "bytes": 13901
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/target_opentargets.tsv",
+   "sha256": "4559266bdc318727b3c89f0f8014447540a50efaf7f9f5e89052a3b169045ed3",
+   "bytes": 11187
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "config/mathys2019.yaml",
+   "sha256": "ff76379b376da8caa21c906a5101e559baedcffa2a05676fd802a31aefba4d84",
+   "bytes": 13560
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11_differential_expression/Ast/de_results.tsv",
+   "sha256": "bcb49318ccde751edaaac2527ccf4cd26206a69103d89c296d5032cea4b5e084",
+   "bytes": 352473
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11_differential_expression/Ex/de_results.tsv",
+   "sha256": "f2c1ca06999125f03aeec0c90778e08e1421a6f33e89ca0c170a83fc52b5b849",
+   "bytes": 2143388
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11_differential_expression/In/de_results.tsv",
+   "sha256": "716042d4a733d042f5fd9199d9d4efedd81d89ebca55f61cefcf2258bb49fa88",
+   "bytes": 1287811
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11_differential_expression/Mic/de_results.tsv",
+   "sha256": "be9305e6fd0c2af600b546eb6d5bd4c0d09fe5c221ca44a6111e379238016a47",
+   "bytes": 68064
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11_differential_expression/OPC/de_results.tsv",
+   "sha256": "63cf69f48a3bb763df7af736c9a1a3ec3bc90483cfbe2cd7f436dd02a6f52057",
+   "bytes": 398128
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11_differential_expression/Oli/de_results.tsv",
+   "sha256": "e1f2c7cda3394bbb07f7bf5161891bd7287cfe89bf0129857b9ab0cc0268fd9c",
+   "bytes": 968041
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11_differential_expression/mathys2019_11_de_summary.tsv",
+   "sha256": "d6e175e74367c18847e218b047a14b11342e3efb4e90b8000b935fa6d29a6ee1",
+   "bytes": 309
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11b_wilcoxon_de/Ast/de_results.tsv",
+   "sha256": "ad4a0ddc203481e01d46368732d0ec77c1f54517e47f48fa9edc75b5a5e5256b",
+   "bytes": 423376
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11b_wilcoxon_de/Ex/de_results.tsv",
+   "sha256": "6938d43f072c21c5c4f057c85586b1f980555f43a3ce9a330fa3f9861c865859",
+   "bytes": 1140945
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11b_wilcoxon_de/In/de_results.tsv",
+   "sha256": "99f958e6f52da8ed7b57fcf2a3915baee9ffe68ed92448449ac08114c13b758a",
+   "bytes": 876551
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11b_wilcoxon_de/Mic/de_results.tsv",
+   "sha256": "501dda694d3e912659a47e7e541278f2646c371d81435aa71006b2ee14870465",
+   "bytes": 200219
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11b_wilcoxon_de/OPC/de_results.tsv",
+   "sha256": "85edcfcdbd09931f70be64891b2f13196fbcc87aa5c04e9add9a52331973517b",
+   "bytes": 501294
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11b_wilcoxon_de/Oli/de_results.tsv",
+   "sha256": "2a121887df3761953bf6b2ec7e854ada79e3eb383e9cbbbaa643d6cd6c4209fc",
+   "bytes": 229794
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/11b_wilcoxon_de/mathys2019_11b_comparison.tsv",
+   "sha256": "2ccf6a561e956ca433a87bcbc98a210c35f6c994f523667efac3e4205c42b7a7",
+   "bytes": 448
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Ast/hub_genes.tsv",
+   "sha256": "ffa430bb0a1eb279194bcf8b75ced8267fd6ab32c3b94e01cc312bcd95704d20",
+   "bytes": 5605
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Ast/module_association.tsv",
+   "sha256": "58a74b55787d836e8a25240ee86976cc452effc7e0f6d4d508f1a2ffbaaa6277",
+   "bytes": 2911
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Ast/modules.tsv",
+   "sha256": "fa5af0715244c7c72f3058999d46c2efcd4353dbb0fee8ee830e63bb080eec3d",
+   "bytes": 276723
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Ex/hub_genes.tsv",
+   "sha256": "2b89b5be6f36fc6fb22b19bea977314ba3971240ee82232ee1eded6e572d9c1e",
+   "bytes": 5204
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Ex/module_association.tsv",
+   "sha256": "49a74ec527c12519a9b4c24eb7f24840753a38ed554a7c8054d0315149b8e104",
+   "bytes": 2613
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Ex/modules.tsv",
+   "sha256": "e4e7df9d9cbf365918d2a9cc6f184abe6dc9e2fb45fd231db3f2f26bc91007de",
+   "bytes": 505280
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/In/hub_genes.tsv",
+   "sha256": "64ff7644e775da0dfba33373618cc0382a67fe9da75709599139006c516693e7",
+   "bytes": 4216
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/In/module_association.tsv",
+   "sha256": "8de0f044d59e00deb2ab6b1f7d2a2d2eaa88507d0b0e3316079ff422dbe0bdd1",
+   "bytes": 2247
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/In/modules.tsv",
+   "sha256": "fcab69525ef44f5fa209b15c46f774983942b6fd42ba3b50c452daa44056bb1d",
+   "bytes": 448348
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/OPC/hub_genes.tsv",
+   "sha256": "42b4ad170206d68febddb1211e6675d2fdc66b0b572586091646c427ddc5178c",
+   "bytes": 10100
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/OPC/module_association.tsv",
+   "sha256": "5aca8f9390708c36719ec9f865c38cee553825f935cfe9ee358268efb31979fc",
+   "bytes": 4931
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/OPC/modules.tsv",
+   "sha256": "f3c932c1f814555d04c5f9dd17aca447d71c16e48dd8b04b99cb463b8c8504d5",
+   "bytes": 321410
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Oli/hub_genes.tsv",
+   "sha256": "92e3fc94eda40c9db585a167911e944335af89de6baf81d3c86c60569893d126",
+   "bytes": 976
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Oli/module_association.tsv",
+   "sha256": "f9a76f1f45a8c9b0483af3ca8d17f10a2a84a17e00f41f539b7d0586dd2597d6",
+   "bytes": 668
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/Oli/modules.tsv",
+   "sha256": "6975125f004c604b1f02540dd0e3270428ac7b2374e0be5538c23771ae0334d4",
+   "bytes": 169642
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/12_coexpression/mathys2019_12_summary.tsv",
+   "sha256": "d2717402c146e2d29b08a87da4ef158d6164c165982a7ac55624724b740c1ec7",
+   "bytes": 728
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13_degas/mathys2019_13_celltype_summary.tsv",
+   "sha256": "5d8d03077313998979cda1f18c8a220e5c97c1d3ed9d34d2dbf5b6f099aa9957",
+   "bytes": 606
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13_degas/mathys2019_13_cv_metrics.tsv",
+   "sha256": "863f00c1e2626b8fdca498938b7618fa65c34f80c4df6dd8efefefd02e2d87f0",
+   "bytes": 1737
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13_degas/mathys2019_13_donor_association.tsv",
+   "sha256": "a385c83d0b349e9ad9a420a2f0897de0ae4cda44bc7cf90113531ee86ceb352b",
+   "bytes": 876
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13_degas/mathys2019_13_selected_genes.tsv",
+   "sha256": "f354953fb41f08a1aa47fae9a57db2153e7d6d73933fe37d35b03dcec48e72fe",
+   "bytes": 29019
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_control_check.tsv",
+   "sha256": "dc056f98e30475a11fb588205efb9d87cefe7d5a678c606d1cb60bc29f25bec5",
+   "bytes": 305
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_genomescreen_coverage.tsv",
+   "sha256": "da4663862ad6c3997678d7d5539bc0b7721987ff1f1db1aa6205e76f2169b951",
+   "bytes": 12735
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_genomescreen_hits.tsv",
+   "sha256": "af5e9b6c2c6d2ee6c26533007103c478476350d376588e0f5ea8ada0ca9d2cab",
+   "bytes": 96776
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_holo_structures.tsv",
+   "sha256": "79023f2105866149e76b1ab5f9713ec0d22c59c06582d35d9b42596539feeaf0",
+   "bytes": 6141
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_not_scored.tsv",
+   "sha256": "0dd569e3bd34f395848f5b3e4cc32aa442559759cd1f85bf4caa1e57b6c4f78c",
+   "bytes": 60503
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_APOE__P02649.tsv",
+   "sha256": "e3c7c9bd8a61b49455eec8e1672006b98687858beb480d76c963551e3a4c26f1",
+   "bytes": 135062
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_BCHE__P06276.tsv",
+   "sha256": "07fdb3de7b02113ccf0bafcdab77b5921252465aee70088dab7a40e4ad47d6aa",
+   "bytes": 158821
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_CACNA1A__O00555.tsv",
+   "sha256": "7d6f57dc03ebaa8d74f36744b2ab3ce42acc616b4f29f85e942b8d99a86974c9",
+   "bytes": 115426
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_DHFR__P00374.tsv",
+   "sha256": "5408bd3f390c050f6005fcc2d0c79c346290cf41ab2d82a3e8af07f28066c056",
+   "bytes": 160635
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_GJA1__P17302.tsv",
+   "sha256": "64525d3136874aff00c100f400c13bd027f868a1507c731f55b527685ea292c4",
+   "bytes": 1104075
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_HTR2A__P28223.tsv",
+   "sha256": "2d666d175a55a847abb4d0987bc81f97aab5e49ed9eb8ffb6040e3c095849573",
+   "bytes": 156276
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_HTR2A_authors_holo.tsv",
+   "sha256": "9cdecf57ba491b6aa23ec4be125b73f7b6a698347581160c8981dd6c04bd811a",
+   "bytes": 138402
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_N4BP2__Q86UW6.tsv",
+   "sha256": "dfb3caa1d3a828d215fc1958659f437c590fcfdefa1a68651ae6a00228ced45b",
+   "bytes": 264200
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_PDGFRA__P16234.tsv",
+   "sha256": "0b92608ad3af933e6c2dadb5373469161785540e4a12a6f2ee0d3a879235a23d",
+   "bytes": 159106
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_PRKG1__Q13976.tsv",
+   "sha256": "400b134074ef44e8ed71d79b21ee7092c53cd6d5a7b93c59785c2a729f2e9610",
+   "bytes": 157163
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_PTPRG__P23470.tsv",
+   "sha256": "7a7d898b5f1f03fb2fc692470f855255ebeb8de8c8a518f89e9f4cf150020378",
+   "bytes": 181687
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_QDPR__P09417.tsv",
+   "sha256": "e44ce03a661e775c81d4c2d37c5eedda286a2a1165b527d8110d080fc306e657",
+   "bytes": 115015
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_SLC26A3__P40879.tsv",
+   "sha256": "4b7630f33b4bf6b811632070b0ab736834fdbb8b5ec43e680426d765d0ca2bfd",
+   "bytes": 475748
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_SNCA__P37840.tsv",
+   "sha256": "2d82b25c332307a7f1321864cb571e0982333ee7f704972e5c528ced1ebd473d",
+   "bytes": 557202
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_SYT1__J3KQA0.tsv",
+   "sha256": "868e3b1c12335e4af3fa0d4f7fda326c7d19f3587e4aa70bcedbdd57b7df97a4",
+   "bytes": 115984
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_scores_TTLL7__Q6ZT98.tsv",
+   "sha256": "1b721cbabf5ee061291201ece84590667d0c9c4d2617db28134226be6f9f51c0",
+   "bytes": 136888
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_target_mapping.tsv",
+   "sha256": "0c33df00db2e87555b91a309007bc3c37f39704693a1d7c5dfdeae9b14893c0e",
+   "bytes": 6924
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_targets.tsv",
+   "sha256": "613792cf1a91e5b8b5a35fe420541d52878b6ecb64330def51afea055a454245",
+   "bytes": 6373
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/chembl_moa.tsv",
+   "sha256": "58dde6e3252e4828e52492132d1ee46e2d3b7c5d25c01f73a3fd4ea8cb55bd8e",
+   "bytes": 31331
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/target_known_actives.tsv",
+   "sha256": "f9ac0f6e04c3aae365d8010341c6718252fbb8af8b25160f59730b5104a22c00",
+   "bytes": 16721
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/target_opentargets.tsv",
+   "sha256": "f09fcdfcffdc2adce6efe914071d4990edc690dd4ee346bdf9da16a05029c3a4",
+   "bytes": 23310
+  },
+  {
+   "dataset": "site",
+   "file": "website/index.html",
+   "sha256": "4b4ff2a86f60742f7bdf7db9640417afeb417213a3c68057012595fd9ce8215a",
+   "bytes": 91934
+  },
+  {
+   "dataset": "site",
+   "file": "website/methods.md",
+   "sha256": "8a190532ec900e765c97ee387a40354ee8c2cc226bb543bbd715be939dd1ed8e",
+   "bytes": 6529
+  },
+  {
+   "dataset": "site",
+   "file": "website/data_dictionary.md",
+   "sha256": "32c259bf52cd83b1efadc3e3d14e283fb34371afd32c230f6c056ccd6066e794",
+   "bytes": 3227
+  },
+  {
+   "dataset": "site",
+   "file": "website_tools/attribution.yaml",
+   "sha256": "c8f7d26e0af9695b04599a7e5c4d002fa10bbbc04c7dcf26488c824f9e2a0af4",
+   "bytes": 5666
+  },
+  {
+   "dataset": "site",
+   "file": "website_build_inputs/gene_annotations.json",
+   "sha256": "72db80c8665a039e3228949c7ac2a7e0a1ff448c004c195259809186dac2196c",
+   "bytes": 19390766
+  },
+  {
+   "dataset": "site",
+   "file": "website_build_inputs/structure_citations.json",
+   "sha256": "28ad907fcffcea46a76fe7a8ec50f2a5f6e93dd8a5da20a4ad8d7aaa1b4a3243",
+   "bytes": 22467
+  },
+  {
+   "dataset": "site",
+   "file": "website_build_inputs/ligand_components.json",
+   "sha256": "bd4c29fa4ef6225d8072ccd5275049715b0f7708c6140497b87235198a143be8",
+   "bytes": 18597
+  },
+  {
+   "dataset": "site",
+   "file": "website_tools/ligand_classes.yaml",
+   "sha256": "b60607d62ba4f38a3ad5414afd221c3a5c122db2dae836433c7a6f7e6862d6e1",
+   "bytes": 5306
+  }
+ ]
+}

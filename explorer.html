@@ -1,0 +1,1435 @@
+<!doctype html>
+<!--
+  filename: index.html
+  date: 2026-10-21
+  version: 1.19
+  description: TREAT-AD results explorer. A single static page (no build step, no server, no external
+    libraries) that shows the gene and drug candidates of the TREAT-AD v2 pipeline for one dataset.
+    Data: data/datasets.js lists the datasets; data/<dataset>/{meta,de_genes,modules,degas,targets,drugs,annotations}.js
+    are written by v2/website_tools/build_site_data.py. Data files are .js (not .json) so the page works when
+    opened from a folder on disk as well as from a web server. Switching datasets needs only new data files.
+    v1.1: narrower columns (all visible at 1280 px), default sort adds donor-level "same direction", per-gene pocket
+    labels (full ID in hover and CSV), DEGAS table retitled and sorted by the AD vs control difference, Ensembl ID
+    shown for repeated symbols, license text corrected (DrugCLIP outputs CC BY-NC 4.0, GenomeScreenDB CC BY 4.0).
+    v1.2: approved-drug Note column also shows a target's fixed note (data field "note"; e.g. SNCA fibril structures).
+    v1.3: "Known action (ChEMBL)" column for approved drugs (data field "moa"); ChEMBL citation, release and license in About.
+    v1.4: approved drugs named by the parent's ChEMBL name; the step 14 list name is a CSV-only column (csvOnly).
+    v1.5: step 14 now reports parent names, so the CSV-only column is gone; one line on ranking stability under the
+    approved-drugs tab and in the gene view; About says which drugs the library excludes.
+    v1.6: a target's full note (meta target_notes) is printed once above the approved-drug table of every view that
+    shows that target; the Note column keeps the short label. Notes: SNCA (fibril surface) and DHFR + N4BP2
+    (cofactor site), all marked low confidence.
+    v1.7: data file annotations (build_site_data.py v1.0). New "Target overview" tab: one sortable row per target gene
+    with its evidence side by side, shaded by category (text always shows the value), filters and CSV. Gene view: new
+    section "Known drugs and druggability" (Open Targets tractability, drugs and clinical candidates, AD association;
+    ChEMBL measured activity) and, for scored targets, the score distribution as inline SVG (all scored drugs, the
+    top-20 cutoff, one tick per drug with measured activity) with the model-check sentence. Approved-drug tables:
+    column "Measured activity on this protein (ChEMBL)"; drug tab filter for it. Cell-type view: section "Genes
+    significant in the nucleus-level test (not donor-aware)" (direction agreement with the donor-level test). About:
+    Open Targets citation, release and license; one sentence on what the model check can and cannot show.
+    v1.8: Target overview: "Cell types higher in AD (nucleus-level test)" and the one-cell-type filter say which test;
+    donor-level column shaded neutral for "same direction" and "not tested", caution only for opposite or mixed.
+    Model-check sentence adds the drug-class sentence and a link to the About training-overlap sentence (#about/training).
+    v1.9: nucleus-level (step 11b) wording without "stronger evidence": gene-table column "Nucleus-level test" (padj < 0.05 /
+    not significant), its Adjusted p note says nuclei are treated as independent, cell-type summary row "Significant in the
+    nucleus-level test", nucleus-level section text. Wording for a donor-level main test (de_source pseudobulk) is unchanged.
+    v1.10: Target overview column "Cell types higher in AD (...)", its note and the one-cell-type filter take the test name
+    from the build's de_source (nucleus-level test for wilcoxon, donor-level test for pseudobulk), as the gene tables do.
+    v1.11: a gene with fdr_tested false (step 11 DESeq2 independent filtering, build_site_data.py v1.3) shows "not tested at
+    FDR" in the Adjusted p and Evidence columns, with a note, never a p-value; it counts as not significant.
+    v1.12: with no ?dataset= in the URL the page opens data/datasets.js's TREATAD_DEFAULT_DATASET (set in the build's
+    DATASET_INFO; mathys2019), not the first name alphabetically. Short reason "no protein product" for non-coding targets.
+    v1.13: caveat box (gene and cell-type views) and the About "Caveat" section removed, with caveatText() and the
+    .caveat style (user, 2026-10-20). The header line and the nucleus-level section text are unchanged.
+    v1.14: gene tables (gene and cell-type views) add "Donor-level (pseudobulk) test" (data field donor_test, build v1.4:
+    significant / not significant / filtered (low counts, not tested at FDR) / not tested); the existing donor-level
+    column is renamed "Donor-level direction". About links methods.md and data_dictionary.md.
+    v1.15: rows for genes tested only in the donor-level test (nucleus_tested false, build v1.5): "Nucleus-level test"
+    shows "not tested (detected in < 10% of nuclei)", Direction "—", no nucleus-level numbers, "Donor-level direction"
+    the donor-level direction itself. "Adjusted p" renamed "Nucleus-level adjusted p" and placed right after
+    "Nucleus-level test". Cell-type facts name the test behind each count and add the donor-level counts.
+    v1.16: site name "AD Target Atlas" (title and heading); "Size of change" renamed "Nucleus-level log2FC" (with the
+    nucleus-level test as main source; "Log2 fold change" otherwise).
+    v1.17: gene search also matches every other symbol of a gene (current NCBI symbol, the other dataset's symbol) from
+    data/aliases.js, written by build_site_pages.py into the published site; optional (ignored if absent, e.g. when the
+    page is opened from v2/website/). A dataset's own symbol always wins over an alias. Searching an alias shows a note.
+    v1.18: gene-table "Direction" -> "Nucleus-level direction" (nucleus-level main test); long text columns wrap; wide
+    tables show a visible horizontal scrollbar (macOS hides overlay scrollbars, so a scrolling table looked cut off);
+    "% nuclei" notes say "at least one UMI count".
+    v1.19: American spelling in the page's own text (color, license, catalog, summarizes, neighbors, gray); short
+    labels for the reworded "not scored" reasons (build_site_data v1.11); print stylesheet: wide tables wrap instead of
+    being clipped when printed or saved as PDF.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AD Target Atlas</title>
+<style>
+  :root {
+    --text: #1b1b1b;
+    --muted: #5c5c5c;
+    --line: #dcdcdc;
+    --soft: #f5f6f8;
+    --accent: #1d5fa6;
+    --accent-soft: #e8f0f9;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: #fff; color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+  header { border-bottom: 1px solid var(--line); padding: 20px 0 0; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  h2 { font-size: 1.15rem; margin: 32px 0 8px; }
+  h3 { font-size: 1rem; margin: 24px 0 8px; }
+  p { margin: 8px 0; }
+  .sub { color: var(--muted); margin: 0 0 12px; }
+  .dataset { margin: 0 0 12px; }
+  nav { display: flex; flex-wrap: wrap; gap: 4px; }
+  nav a, .tabs button {
+    display: inline-block; padding: 10px 14px; color: var(--text); text-decoration: none;
+    border: 1px solid transparent; border-bottom: none; border-radius: 6px 6px 0 0; font: inherit;
+    background: none; cursor: pointer;
+  }
+  nav a[aria-current="page"], .tabs button[aria-selected="true"] {
+    border-color: var(--line); background: #fff; color: var(--accent); font-weight: 600;
+    margin-bottom: -1px; border-bottom: 1px solid #fff;
+  }
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: 16px 0 0; }
+  main { padding: 8px 0 48px; }
+  section[hidden] { display: none; }
+  label { font-weight: 600; display: block; margin: 16px 0 6px; }
+  input[type="search"], select {
+    font: inherit; padding: 9px 10px; border: 1px solid #b9b9b9; border-radius: 6px;
+    width: 100%; max-width: 360px; background: #fff; color: var(--text);
+  }
+  .controls { display: flex; flex-wrap: wrap; gap: 0 24px; align-items: flex-end; }
+  .suggest { list-style: none; margin: 4px 0 0; padding: 0; max-width: 360px; }
+  .suggest li button {
+    width: 100%; text-align: left; font: inherit; padding: 8px 10px; border: 1px solid var(--line);
+    border-top: none; background: #fff; cursor: pointer;
+  }
+  .suggest li:first-child button { border-top: 1px solid var(--line); }
+  .suggest li button:hover, .suggest li button:focus { background: var(--accent-soft); }
+  .note { color: var(--muted); }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: 6px;
+            scrollbar-width: auto; scrollbar-color: var(--muted) transparent; }
+  .scroll::-webkit-scrollbar { height: 10px; }
+  .scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 5px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; white-space: nowrap; }
+  td.cellwrap { white-space: normal; min-width: 6em; }
+  th { background: var(--soft); font-weight: 600; white-space: normal; min-width: 4.5em; cursor: pointer; user-select: none; }
+  th.nosort { cursor: default; }
+  th .arrow { color: var(--accent); margin-left: 4px; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.msg { color: var(--muted); font-style: italic; white-space: normal; }
+  td.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
+  .toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin: 8px 0; }
+  .count { color: var(--muted); font-size: 0.9rem; }
+  button.btn {
+    font: inherit; font-size: 0.9rem; padding: 7px 12px; border: 1px solid var(--accent); color: var(--accent);
+    background: #fff; border-radius: 6px; cursor: pointer;
+  }
+  button.btn:hover { background: var(--accent-soft); }
+  .more { margin: 10px 0 0; }
+  a.gene { color: var(--accent); }
+  .tip { border-bottom: 1px dotted currentColor; cursor: help; }
+  #tooltip {
+    position: fixed; z-index: 100; max-width: 300px; padding: 8px 10px; background: #fff; color: var(--text);
+    border: 1px solid #9a9a9a; border-radius: 6px; font-size: 0.85rem; font-weight: normal; line-height: 1.4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); pointer-events: none; white-space: normal;
+  }
+  dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 8px 0; }
+  dl.facts dt { font-weight: 600; }
+  dl.facts dd { margin: 0; }
+  ul.steps { padding-left: 20px; }
+  ul.steps li { margin: 6px 0; }
+  .error { color: #a12020; }
+  /* Category shading (light tints; the cell text always carries the value, so color is never the only cue). */
+  td.c-pos { background: #cde2fb; }      /* present / available */
+  td.c-mid { background: #fbe6b0; }      /* partial / weaker */
+  td.c-neg { background: #f0efec; }      /* none / not tested */
+  td.c-warn { background: #f8d2c4; }     /* caution (donor-level opposite or mixed, low confidence) */
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.85rem; color: var(--muted); margin: 6px 0; }
+  .legend span.sw { display: inline-block; width: 12px; height: 12px; border: 1px solid #9a9a9a; vertical-align: -1px; margin-right: 5px; }
+  table.tight th, table.tight td { padding-left: 6px; padding-right: 6px; }
+  table.tight td.cellwrap { min-width: 5em; }
+  table.compact { font-size: 0.85rem; }
+  table.compact th, table.compact td { padding: 6px 6px; }
+  table.compact th { min-width: 3.6em; }
+  table.compact td.cellwrap { min-width: 5em; }
+  .checks { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 12px 0 4px; }
+  .checks label { font-weight: normal; margin: 0; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .checks input { width: 18px; height: 18px; margin: 0; }
+  .dist { max-width: 680px; margin: 8px 0 4px; }
+  .dist svg { display: block; width: 100%; height: auto; }
+  .dist svg text { font: 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #52514e; }
+  .dist .hit:focus { outline: 2px solid var(--accent); }
+  @media print {
+    .scroll { overflow: visible; border: 0; }
+    table { font-size: 9.5pt; }
+    th, td { white-space: normal; overflow-wrap: break-word; padding: 4px 5px; }
+  }
+  @media (max-width: 600px) {
+    body { font-size: 15px; }
+    nav a, .tabs button { padding: 8px 10px; }
+    th, td { padding: 7px 9px; }
+    dl.facts { grid-template-columns: 1fr; gap: 2px; }
+    dl.facts dd { margin-bottom: 8px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap"><div role="navigation" aria-label="Site" style="font-size:14px;padding:10px 0 0"><a href="index.html">Home</a> · <a href="genes/index.html">Genes</a> · <a href="methods.html">Methods</a> · <a href="data_dictionary.html">Data dictionary</a> · <a href="index.html#downloads">Downloads</a></div>
+    <h1>AD Target Atlas</h1>
+    <p class="sub">Gene and drug candidates for Alzheimer's disease (AD). Computational predictions for follow-up, not validated targets.</p>
+    <div class="dataset" id="dataset"></div>
+    <nav id="nav">
+      <a href="#gene" data-view="gene">Search by gene</a>
+      <a href="#overview" data-view="overview">Target overview</a>
+      <a href="#celltype" data-view="celltype">Browse by cell type</a>
+      <a href="#drugs" data-view="drugs">Drug candidates</a>
+      <a href="#about" data-view="about">About</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <noscript><p class="error">This page needs JavaScript.</p></noscript>
+  <p id="status" class="note">Loading data…</p>
+
+  <section id="view-gene" hidden>
+    <label for="gene-input">Gene symbol</label>
+    <input type="search" id="gene-input" placeholder="e.g. APOE" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <ul class="suggest" id="gene-suggest"></ul>
+    <div id="gene-result"></div>
+  </section>
+
+  <section id="view-overview" hidden>
+    <div class="controls">
+      <div><label for="ov-ct">Cell type</label><select id="ov-ct"></select></div>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="ov-known"> Has known drugs</label>
+      <label><input type="checkbox" id="ov-scored"> Approved-drug scores available</label>
+      <label><input type="checkbox" id="ov-one"> <span id="ov-one-text">Changes in one cell type only (nucleus-level test)</span></label>
+    </div>
+    <div id="ov-result"></div>
+  </section>
+
+  <section id="view-celltype" hidden>
+    <label for="ct-select">Cell type</label>
+    <select id="ct-select"></select>
+    <div id="ct-result"></div>
+  </section>
+
+  <section id="view-drugs" hidden>
+    <div class="controls">
+      <div><label for="drug-gene">Target gene</label><input type="search" id="drug-gene" placeholder="All genes" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
+      <div><label for="drug-ct">Cell type</label><select id="drug-ct"></select></div>
+    </div>
+    <div class="checks" id="drug-checks">
+      <label><input type="checkbox" id="drug-known"> Only drugs with measured activity on the target (ChEMBL)</label>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-approved" aria-selected="true">Approved drugs</button>
+      <button role="tab" id="tab-screening" aria-selected="false">Screening hits</button>
+    </div>
+    <div id="drug-result"></div>
+  </section>
+
+  <section id="view-about" hidden></section>
+</main>
+<div id="tooltip" hidden></div>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------ loading */
+
+var DATA_FILES = ["meta", "de_genes", "modules", "degas", "targets", "drugs", "annotations"];
+var PAGE_SIZE = 50;        // rows shown before "Show 50 more"
+var D = {};                // the loaded data, one entry per data file
+var IDX = {};              // lookup tables built once after loading
+
+/** Load a script file and call back when it has run (works from file:// and from a server). */
+function loadScript(src, done, failed) {
+  var s = document.createElement("script");
+  s.src = src;
+  s.onload = done;
+  s.onerror = function () { failed(src); };
+  document.head.appendChild(s);
+}
+
+/** Load data/datasets.js, choose the dataset (?dataset=..., else the first), then load its data files in order. */
+function start() {
+  var fail = function (src) {
+    setStatus("Could not load " + src + ". Keep index.html next to the data/ folder.", true);
+  };
+  loadScript("data/datasets.js", function () {
+    var list = window.TREATAD_DATASETS || [];
+    if (!list.length) { setStatus("No datasets listed in data/datasets.js.", true); return; }
+    var wanted = new URLSearchParams(location.search).get("dataset");
+    var fallback = list.indexOf(window.TREATAD_DEFAULT_DATASET) >= 0 ? window.TREATAD_DEFAULT_DATASET : list[0];
+    var ds = list.indexOf(wanted) >= 0 ? wanted : fallback;
+    var i = 0;
+    var next = function () {
+      if (i === DATA_FILES.length) {
+        var finish = function () { D = window.TREATAD_DATA; init(ds, list); };
+        loadScript("data/aliases.js", finish, finish);   // optional: other symbols of each gene (published site only)
+        return;
+      }
+      loadScript("data/" + ds + "/" + DATA_FILES[i++] + ".js", next, fail);
+    };
+    next();
+  }, fail);
+}
+
+function setStatus(text, isError) {
+  var el = document.getElementById("status");
+  el.textContent = text;
+  el.className = isError ? "error" : "note";
+  el.hidden = !text;
+}
+
+/* ------------------------------------------------------------------ small helpers */
+
+/** Create an element; attrs may include text, cls, tip and any attribute; children are nodes or strings. */
+function el(tag, attrs) {
+  var node = document.createElement(tag);
+  attrs = attrs || {};
+  Object.keys(attrs).forEach(function (k) {
+    var v = attrs[k];
+    if (v === undefined || v === null) return;
+    if (k === "text") node.textContent = v;
+    else if (k === "cls") node.className = v;
+    else if (k === "tip") { node.setAttribute("data-tip", v); node.setAttribute("tabindex", "0"); node.classList.add("tip"); }
+    else if (k === "on") Object.keys(v).forEach(function (e) { node.addEventListener(e, v[e]); });
+    else node.setAttribute(k, v);
+  });
+  for (var i = 2; i < arguments.length; i++) {
+    var c = arguments[i];
+    if (c === null || c === undefined) continue;
+    node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  }
+  return node;
+}
+
+/** A label with a one-line hover note. */
+function tip(text, note) { return el("span", { text: text, tip: note }); }
+
+/** {columns, rows} -> array of objects. */
+function records(table) {
+  return table.rows.map(function (r) {
+    var o = {};
+    table.columns.forEach(function (c, i) { o[c] = r[i]; });
+    return o;
+  });
+}
+
+/** Display a number with 3 significant digits ("" when missing). */
+function fmtNum(x) {
+  if (x === null || x === undefined) return "";
+  if (x !== 0 && Math.abs(x) < 0.001) return x.toExponential(2);
+  return String(Number(x.toPrecision(3)));
+}
+
+/** Display an adjusted p-value with 2 significant digits. */
+function fmtP(x) {
+  if (x === null || x === undefined) return "";
+  if (x !== 0 && x < 0.001) return x.toExponential(1);
+  return String(Number(x.toPrecision(2)));
+}
+
+function fmtPct(x) { return x === null || x === undefined ? "" : Math.round(x * 100) + "%"; }
+
+function fmtInt(n) { return n.toLocaleString("en-US"); }
+
+function ctName(ct) { return D.meta.cell_type_names[ct] || ct; }
+
+/** "Ast, Ex" (codes as stored) -> "Astrocytes; Excitatory neurons". */
+function ctNames(codes) { return codes.split(", ").map(ctName).join("; "); }
+
+function evidence(strong) { return strong ? "stronger" : "weaker"; }
+
+/** Link to the gene view. */
+function geneLink(symbol) {
+  return el("a", { cls: "gene", href: "#gene/" + encodeURIComponent(symbol), text: symbol });
+}
+
+/* ------------------------------------------------------------------ hover notes */
+
+/** One floating note for every [data-tip] element: hover, keyboard focus or tap shows it. */
+function setupTooltips() {
+  var box = document.getElementById("tooltip");
+  var current = null;
+  function show(target) {
+    current = target;
+    box.textContent = target.getAttribute("data-tip");
+    box.hidden = false;
+    var r = target.getBoundingClientRect();
+    var w = box.offsetWidth, h = box.offsetHeight;
+    var left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8);
+    var top = r.bottom + 6;
+    if (top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 6);
+    box.style.left = left + "px";
+    box.style.top = top + "px";
+  }
+  function hide() { box.hidden = true; current = null; }
+  document.addEventListener("mouseover", function (e) {
+    var t = e.target.closest("[data-tip]");
+    if (t) show(t); else if (current && !current.contains(document.activeElement)) hide();
+  });
+  document.addEventListener("focusin", function (e) {
+    var t = e.target.closest("[data-tip]");
+    if (t) show(t);
+  });
+  document.addEventListener("focusout", hide);
+  document.addEventListener("scroll", hide, true);
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-tip]");
+    if (t) { e.stopPropagation(); show(t); } else hide();
+  }, true);
+}
+
+/* ------------------------------------------------------------------ tables */
+
+/**
+ * A plain, sortable table with a CSV download that uses exactly the displayed text.
+ * cfg.columns: [{label, note, text(row), value(row) for sorting, cls, cellNote(row), link(row) -> node, nosort}]
+ * cfg.rows: row objects; cfg.compare: default order; cfg.pageSize: rows before "Show more" (0 = all);
+ * cfg.csvName: file name; cfg.message(row): text for a full-width message row (screen) / second column (CSV).
+ * A column's csv(row), if given, is written to the CSV instead of the screen text (used for the full pocket ID).
+ * A column with csvOnly: true is written to the CSV but not shown on screen. cfg.tableClass: class of the <table>.
+ */
+function makeTable(host, cfg) {
+  var order = cfg.rows.slice();
+  if (cfg.compare) order.sort(cfg.compare);
+  var screenCols = cfg.columns.filter(function (c) { return !c.csvOnly; });
+  var sortCol = -1, sortDir = 1;
+  var shown = cfg.pageSize || order.length;
+
+  var box = el("div");
+  host.appendChild(box);
+
+  function cellText(col, row) {
+    if (cfg.message && cfg.message(row)) {
+      var idx = screenCols.indexOf(col);
+      return idx === 0 ? col.text(row) : idx === 1 ? cfg.message(row) : "";
+    }
+    return col.text(row);
+  }
+
+  function sortBy(i) {
+    if (sortCol === i) sortDir = -sortDir; else { sortCol = i; sortDir = 1; }
+    var col = screenCols[i];
+    var val = col.value || col.text;
+    order.sort(function (a, b) {
+      var x = val(a), y = val(b);
+      var xm = x === null || x === undefined || x === "", ym = y === null || y === undefined || y === "";
+      if (xm || ym) return xm === ym ? 0 : xm ? 1 : -1;      // missing values always last
+      if (typeof x === "number" && typeof y === "number") return (x - y) * sortDir;
+      return String(x).localeCompare(String(y), "en", { numeric: true }) * sortDir;
+    });
+    render();
+  }
+
+  function download() {
+    var esc = function (v) { v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    var lines = [cfg.columns.map(function (c) { return esc(c.label); }).join(",")];
+    order.forEach(function (row) {
+      lines.push(cfg.columns.map(function (c) {
+        return esc(c.csv && !(cfg.message && cfg.message(row)) ? c.csv(row) : cellText(c, row));
+      }).join(","));
+    });
+    var blob = new Blob(["﻿" + lines.join("\r\n") + "\r\n"], { type: "text/csv;charset=utf-8" });
+    var a = el("a", { href: URL.createObjectURL(blob), download: cfg.csvName });
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
+  function render() {
+    box.textContent = "";
+    var n = Math.min(shown, order.length);
+    var countText = order.length === 0 ? "No rows" :
+      n < order.length ? "Showing " + fmtInt(n) + " of " + fmtInt(order.length) + " rows" : fmtInt(order.length) + (order.length === 1 ? " row" : " rows");
+    box.appendChild(el("div", { cls: "toolbar" },
+      el("span", { cls: "count", text: countText }),
+      el("button", { cls: "btn", type: "button", on: { click: download } }, "Download ",
+        tip("CSV", "Spreadsheet file (comma-separated values). Holds every row of this table, as shown."))));
+
+    var head = el("tr");
+    screenCols.forEach(function (c, i) {
+      var label = c.note ? tip(c.label, c.note) : document.createTextNode(c.label);
+      var th = el("th", { scope: "col", cls: c.nosort ? "nosort" : null }, label);
+      if (sortCol === i) th.appendChild(el("span", { cls: "arrow", text: sortDir > 0 ? "▲" : "▼" }));
+      if (!c.nosort) {
+        th.setAttribute("aria-sort", sortCol === i ? (sortDir > 0 ? "ascending" : "descending") : "none");
+        th.addEventListener("click", function (e) { if (!e.target.closest("[data-tip]")) sortBy(i); });
+      }
+      head.appendChild(th);
+    });
+    var body = el("tbody");
+    order.slice(0, n).forEach(function (row) {
+      var tr = el("tr");
+      if (cfg.message && cfg.message(row)) {
+        tr.appendChild(el("td", {}, screenCols[0].link ? screenCols[0].link(row) : screenCols[0].text(row)));
+        tr.appendChild(el("td", { cls: "msg", colspan: screenCols.length - 1, text: cfg.message(row) }));
+      } else {
+        screenCols.forEach(function (c) {
+          var td = el("td", { cls: typeof c.cls === "function" ? c.cls(row) : c.cls });
+          var t = c.text(row);
+          var content = c.link ? c.link(row) : document.createTextNode(t);
+          var note = c.cellNote ? c.cellNote(row) : null;
+          td.appendChild(note ? el("span", { tip: note }, content) : content);
+          tr.appendChild(td);
+        });
+      }
+      body.appendChild(tr);
+    });
+    box.appendChild(el("div", { cls: "scroll" }, el("table", { cls: cfg.tableClass }, el("thead", {}, head), body)));
+    if (n < order.length) {
+      box.appendChild(el("div", { cls: "more" }, el("button", { cls: "btn", type: "button", on: {
+        click: function () { shown += PAGE_SIZE; render(); } } }, "Show " + Math.min(PAGE_SIZE, order.length - n) + " more")));
+    }
+  }
+  render();
+}
+
+/* ------------------------------------------------------------------ shared wording */
+
+var NOT_COMPARABLE = "Scores are not comparable between approved drugs and screening hits.";
+var APPROX_RANKING = "Rankings are approximate: rerunning the model keeps most of each top 20, but the last few places can change.";
+var FDR_NOTE = "DESeq2 left this low-count gene out of the multiple-testing correction (independent filtering), so it " +
+  "has no adjusted p-value. It counts as not significant.";
+function notFdrTested(r) { return r.fdr_tested === false; }
+var UNCLEAR_NOTE = "The two measures of change point in different directions for this gene.";
+var DONOR_TEST_NOTE = "Result of the donor-level test (pseudobulk DESeq2: each donor is one sample) for this gene and cell type: " +
+  "significant = adjusted p-value below 0.05; filtered = too few counts, left out of the multiple-testing correction; " +
+  "not tested = removed by that test's low-count filter.";
+var NUCLEUS_NOT_TESTED_NOTE = "The nucleus-level test only tests genes detected in at least 10% of the nuclei of " +
+  "either group; this gene was tested by the donor-level test only.";
+var DONOR_ONLY_NOTE = "Direction in the donor-level test; there is no nucleus-level result to compare with.";
+var DONOR_NOTE = "Same or opposite direction in the donor-level test. 'Not tested' means that test filtered " +
+                 "the gene out for having too few reads in this cell type.";
+var ACTIVITY_LABEL = "Measured activity on this protein (ChEMBL)";
+var ACTIVITY_NOTE = "ChEMBL has a measured activity of this drug on this protein with pChEMBL 6 or higher (roughly 1 µM " +
+                    "or stronger). Activity data include screening panels, so measured activity does not mean the protein " +
+                    "is the drug's intended target.";
+var ACTIVITY_TITLE = "Approved drugs with measured activity on this protein (ChEMBL, pChEMBL 6 or higher, roughly 1 µM or stronger)";
+var OT_DRUGS_TITLE = "Drugs and clinical candidates acting through this target (Open Targets, by mechanism of action)";
+var AUROC_NOTE = "Area under the ROC curve: the chance that a drug with measured activity on this protein scores higher " +
+                 "than a randomly chosen other drug. 0.5 = chance, 1 = perfect.";
+
+/** Open Targets wording note for a tractability label (names the source of the ranking). */
+function tractNote() {
+  var r = D.annotations.releases;
+  return "Strongest true label in Open Targets' tractability assessment (release " + r.opentargets + "), shown in their " +
+         "wording. Labels are ranked by the bucket order of the Open Targets tractability pipeline README " +
+         "(github.com/melschneider/tractability_pipeline_v2, commit " + r.tractability_readme + "); clinical labels first.";
+}
+
+/** "Approved Drug (via a 26-gene family)" etc.; "none" when no label is true. */
+function smText(g) { return g.sm_label ? g.sm_label + (g.sm_family_n ? " (via a " + g.sm_family_n + "-gene family)" : "") : "none"; }
+function abText(g) { return g.ab_label || "none"; }
+var FAMILY_NOTE_DRUG = "The mechanism's target is a protein family or complex of several genes that includes this " +
+                       "protein; the drug may act mainly on another member.";
+var FAMILY_NOTE = "Every approved small molecule behind this label acts through a protein family or complex that " +
+                  "includes this protein, not through this protein alone.";
+
+/** Mechanism text with the family note when every mechanism target of the drug spans several genes. */
+function moaText(d) { return d.moa + (d.family_n ? " (via a " + d.family_n + "-gene family)" : ""); }
+
+/** Column definitions for gene-level DE rows (shared by the gene view and the cell-type view). */
+function deColumns(first) {
+  var m = D.meta;
+  var nucleus = m.de_source === "wilcoxon";
+  var sigText = m.strong_evidence_rule.replace("adjusted p-value", "padj");   // "padj < 0.05", the pipeline's de.alpha
+  var cols = [first,
+    { label: nucleus ? "Nucleus-level direction" : "Direction", note: "Higher or lower in AD than in controls.", cls: "cellwrap",
+      text: function (r) { return r.nucleus_tested === false ? "—" : r.direction; },
+      cellNote: function (r) { return r.direction === "unclear" ? UNCLEAR_NOTE : r.nucleus_tested === false ? NUCLEUS_NOT_TESTED_NOTE : null; } },
+    nucleus
+      ? { label: "Nucleus-level test", note: "Significant in the " + m.de_source_label + ": " + m.strong_evidence_rule + ".",
+          text: function (r) { return r.nucleus_tested === false ? r.direction : r.strong_evidence ? sigText : "not significant"; },
+          cellNote: function (r) { return r.nucleus_tested === false ? NUCLEUS_NOT_TESTED_NOTE : null; },
+          value: function (r) { return r.strong_evidence ? 0 : r.nucleus_tested === false ? 2 : 1; } }
+      : { label: "Evidence", note: "Stronger = " + m.strong_evidence_rule + " in the " + m.de_source_label + ".",
+          text: function (r) { return notFdrTested(r) ? "not tested at FDR" : evidence(r.strong_evidence); },
+          cellNote: function (r) { return notFdrTested(r) ? FDR_NOTE : null; }, value: function (r) { return r.strong_evidence ? 0 : 1; } },
+    { label: nucleus ? "Nucleus-level adjusted p" : "Adjusted p", cls: "num", note: nucleus
+        ? "Adjusted p-value of the nucleus-level test. The test treats nuclei as independent, so its p-values are smaller " +
+          "than a donor-level test would give."
+        : "Adjusted p-value. Smaller = stronger evidence.",
+      text: function (r) { return notFdrTested(r) ? "not tested at FDR" : fmtP(r.padj); },
+      cellNote: function (r) { return notFdrTested(r) ? FDR_NOTE : null; }, value: function (r) { return r.padj; } },
+    { label: nucleus ? "Nucleus-level log2FC" : "Log2 fold change", note: "Log2 fold change, AD vs control: 1 = twice as high in AD, −1 = half as high.", cls: "num",
+      text: function (r) { return fmtNum(r.effect); }, value: function (r) { return r.effect; } }];
+  if (m.de_source === "wilcoxon") {
+    cols.splice(4, 0,   // after Direction, Nucleus-level test and Nucleus-level adjusted p
+      { label: "Donor-level (pseudobulk) test", note: DONOR_TEST_NOTE, cls: "cellwrap",
+        text: function (r) { return r.donor_test; }, value: function (r) { return r.donor_test === "significant" ? 0 : 1; } },
+      { label: "Donor-level direction", note: DONOR_NOTE, cls: "cellwrap",
+        text: function (r) { return r.donor_level; },
+        cellNote: function (r) { return r.donor_level === "not compared" ? UNCLEAR_NOTE : r.nucleus_tested === false ? DONOR_ONLY_NOTE : null; } });
+    cols.push(
+      { label: "% nuclei AD", note: "Share of this cell type's nuclei from AD donors with at least one UMI count of the gene.", cls: "num",
+        text: function (r) { return fmtPct(r.pct_ad); }, value: function (r) { return r.pct_ad; } },
+      { label: "% nuclei control", note: "Share of this cell type's nuclei from control donors with at least one UMI count of the gene.", cls: "num",
+        text: function (r) { return fmtPct(r.pct_control); }, value: function (r) { return r.pct_control; } });
+  }
+  return cols;
+}
+
+/** Default gene order: significant in the main test (padj below de.alpha) first, then donor-level "same direction", then size of change (largest first). */
+function deCompare(a, b) {
+  if (a.missing || b.missing) return (a.missing ? 1 : 0) - (b.missing ? 1 : 0);   // "not measured" rows last
+  return (b.strong_evidence - a.strong_evidence) ||
+         ((b.donor_level === "same direction") - (a.donor_level === "same direction")) ||
+         (Math.abs(b.effect) - Math.abs(a.effect)) || a.gene_symbol.localeCompare(b.gene_symbol);
+}
+
+/* ------------------------------------------------------------------ indexes */
+
+/** Build lookups: gene symbol -> ids, per-gene DE and module rows, module info, hubs, bulk genes, targets, drugs. */
+function buildIndex() {
+  var symbolIds = new Map(), idSymbol = new Map();
+  function addGene(sym, id) {
+    if (!sym) return;
+    var key = sym.toUpperCase();
+    if (!symbolIds.has(key)) symbolIds.set(key, []);
+    if (id && symbolIds.get(key).indexOf(id) < 0) symbolIds.get(key).push(id);
+    if (id) idSymbol.set(id, sym);
+  }
+  var de = records(D.de_genes), deByGene = new Map(), deByCt = new Map();
+  de.forEach(function (r) {
+    addGene(r.gene_symbol, r.gene_id);
+    if (!deByGene.has(r.gene_id)) deByGene.set(r.gene_id, {});
+    deByGene.get(r.gene_id)[r.cell_type] = r;
+    if (!deByCt.has(r.cell_type)) deByCt.set(r.cell_type, []);
+    deByCt.get(r.cell_type).push(r);
+  });
+  var modGenes = records(D.modules.genes), modByGene = new Map(), hubs = new Map();
+  modGenes.forEach(function (r) {
+    addGene(r.gene_symbol, r.gene_id);
+    if (!modByGene.has(r.gene_id)) modByGene.set(r.gene_id, {});
+    modByGene.get(r.gene_id)[r.cell_type] = r;
+    if (r.hub) {
+      var k = r.cell_type + "|" + r.module;
+      if (!hubs.has(k)) hubs.set(k, []);
+      hubs.get(k).push(r);
+    }
+  });
+  hubs.forEach(function (list) { list.sort(function (a, b) { return b.kme - a.kme; }); });
+  var modInfo = new Map();
+  records(D.modules.modules).forEach(function (r) { modInfo.set(r.cell_type + "|" + r.module, r); });
+  var bulk = new Set();
+  records(D.degas.bulk_de_genes).forEach(function (r) { addGene(r.gene_symbol, r.gene_id); bulk.add(r.gene_id); });
+  var targets = records(D.targets), targetsBySym = new Map();
+  targets.forEach(function (r) {
+    addGene(r.gene_symbol, r.gene_id);
+    if (!targetsBySym.has(r.gene_symbol)) targetsBySym.set(r.gene_symbol, []);
+    targetsBySym.get(r.gene_symbol).push(r);
+  });
+  var drugs = records(D.drugs), drugsBySym = new Map();
+  drugs.forEach(function (r) {
+    if (!drugsBySym.has(r.gene_symbol)) drugsBySym.set(r.gene_symbol, []);
+    drugsBySym.get(r.gene_symbol).push(r);
+  });
+  var dupSyms = new Map();   // cell type -> symbols that name several Ensembl IDs there
+  deByCt.forEach(function (list, ct) {
+    var seen = new Map();
+    list.forEach(function (r) { seen.set(r.gene_symbol, (seen.get(r.gene_symbol) || 0) + 1); });
+    dupSyms.set(ct, new Set(Array.from(seen.keys()).filter(function (k) { return seen.get(k) > 1; })));
+  });
+  var pocketLabel = new Map(), perGene = new Map();   // gene|GenomeScreenDB pocket ID -> "Pocket n" (n per gene, step 14 order)
+  drugs.forEach(function (r) {
+    if (!r.pocket || pocketLabel.has(r.gene_symbol + "|" + r.pocket)) return;
+    perGene.set(r.gene_symbol, (perGene.get(r.gene_symbol) || 0) + 1);
+    pocketLabel.set(r.gene_symbol + "|" + r.pocket, "Pocket " + perGene.get(r.gene_symbol));
+  });
+  var symbols = Array.from(idSymbol.values());
+  var aliases = window.TREATAD_ALIASES || {};   // symbol -> Ensembl IDs, for genes with several symbols
+  Object.keys(aliases).forEach(function (a) {
+    var key = a.toUpperCase();
+    if (symbolIds.has(key)) return;              // this dataset's own symbol wins
+    var ids = aliases[a].filter(function (id) { return idSymbol.has(id); });
+    if (!ids.length) return;
+    symbolIds.set(key, ids);
+    symbols.push(a);
+  });
+  symbols = Array.from(new Set(symbols)).sort();
+  IDX = { symbolIds: symbolIds, idSymbol: idSymbol, deByGene: deByGene, deByCt: deByCt, modByGene: modByGene,
+          hubs: hubs, modInfo: modInfo, bulk: bulk, targetsBySym: targetsBySym, drugs: drugs,
+          drugsBySym: drugsBySym, symbols: symbols, dupSyms: dupSyms, pocketLabel: pocketLabel };
+}
+
+/* ------------------------------------------------------------------ gene view */
+
+function setupGeneView() {
+  var input = document.getElementById("gene-input");
+  var list = document.getElementById("gene-suggest");
+  function suggest() {
+    var q = input.value.trim().toUpperCase();
+    list.textContent = "";
+    if (!q) return;
+    var hits = [];
+    for (var i = 0; i < IDX.symbols.length && hits.length < 8; i++) {
+      if (IDX.symbols[i].toUpperCase().indexOf(q) === 0) hits.push(IDX.symbols[i]);
+    }
+    hits.forEach(function (s) {
+      list.appendChild(el("li", {}, el("button", { type: "button", text: s, on: { click: function () { go("gene/" + s); } } })));
+    });
+  }
+  input.addEventListener("input", suggest);
+  input.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    var q = input.value.trim();
+    if (!q) return;
+    var first = list.querySelector("button");
+    var exact = IDX.symbolIds.has(q.toUpperCase());
+    go("gene/" + (exact || !first ? q : first.textContent));
+  });
+}
+
+/** Show everything known about one gene symbol. */
+function showGene(symbol) {
+  var input = document.getElementById("gene-input");
+  var out = document.getElementById("gene-result");
+  document.getElementById("gene-suggest").textContent = "";
+  out.textContent = "";
+  if (!symbol) { out.appendChild(el("p", { cls: "note", text: "Type a gene symbol to see its results." })); return; }
+  input.value = symbol;
+  var ids = IDX.symbolIds.get(symbol.toUpperCase());
+  if (!ids || !ids.length) {
+    out.appendChild(el("p", { text: "No results for " + symbol + " in this dataset. Genes with very few reads were not measured." }));
+    return;
+  }
+  ids.forEach(function (id) {
+    var own = IDX.idSymbol.get(id);
+    if (own.toUpperCase() !== symbol.toUpperCase()) {
+      out.appendChild(el("p", { cls: "note", text: symbol + " is another symbol of " + own + ", the name used in this dataset." }));
+    }
+    renderGene(out, own, id, ids.length > 1);
+  });
+}
+
+function renderGene(out, symbol, id, showId) {
+  var m = D.meta;
+  out.appendChild(el("h2", { text: symbol + (showId ? " (" + id + ")" : "") }));
+
+  // 1. change in AD per cell type
+  out.appendChild(el("h3", { text: "Change in AD, by cell type" }));
+  var perCt = IDX.deByGene.get(id) || {};
+  var rows = m.cell_types.map(function (ct) { return perCt[ct] || { cell_type: ct, missing: true }; });
+  var cols = deColumns({ label: "Cell type", text: function (r) { return ctName(r.cell_type); } });
+  makeTable(out, { columns: cols, rows: rows, csvName: symbol + "_change_in_AD.csv", compare: deCompare,
+                   message: function (r) { return r.missing ? "not measured in this cell type" : null; } });
+
+  // 2. co-expression module
+  out.appendChild(el("h3", {}, tip("Co-expression module", "A group of genes whose activity rises and falls together across nuclei; modules are named by color.")));
+  var mods = IDX.modByGene.get(id) || {};
+  var mrows = m.cell_types.map(function (ct) {
+    var r = mods[ct];
+    if (!m.per_cell_type[ct].modules) return { cell_type: ct, message: "not available for this cell type" };
+    if (!r) return { cell_type: ct, message: "not in a module" };
+    var info = IDX.modInfo.get(ct + "|" + r.module);
+    return { cell_type: ct, module: r.module, hub: r.hub, info: info };
+  });
+  makeTable(out, { csvName: symbol + "_modules.csv", rows: mrows, message: function (r) { return r.message || null; },
+    columns: [
+      { label: "Cell type", text: function (r) { return ctName(r.cell_type); } },
+      { label: "Module", text: function (r) { return r.module || ""; } },
+      { label: "Hub gene", note: "One of the most connected genes of its module.", text: function (r) { return r.hub ? "yes" : "no"; } },
+      { label: "Module in AD", note: "Module activity per donor, AD vs control.", text: function (r) { return r.info ? r.info.direction : ""; } },
+      { label: "Evidence", note: "Stronger = " + m.module_evidence_rule + " for the module.", text: function (r) { return r.info ? evidence(r.info.strong_evidence) : ""; } },
+      { label: "Adjusted p", note: "Adjusted p-value for the module. Smaller = stronger evidence.", cls: "num",
+        text: function (r) { return r.info ? fmtP(r.info.padj) : ""; }, value: function (r) { return r.info ? r.info.padj : null; } }] });
+
+  // 3. bulk tissue (DEGAS bulk_de flag)
+  out.appendChild(el("h3", {}, "Bulk brain tissue"));
+  var inBulk = IDX.bulk.has(id);
+  out.appendChild(el("p", {}, inBulk ? "Also different in AD in bulk brain tissue (" : "Not among the genes different in AD in bulk brain tissue (",
+    tip("MSBB", "Mount Sinai Brain Bank: bulk RNA sequencing of post-mortem brain tissue, " + m.bulk_region_name + "."),
+    ")."));
+
+  var tg = IDX.targetsBySym.get(symbol);
+  // 4. known drugs and druggability (target genes only)
+  if (tg) knownDrugsSection(out, symbol);
+
+  // 5. drugs
+  out.appendChild(el("h3", {}, "Drug predictions"));
+  if (!tg) {
+    out.appendChild(el("p", { cls: "note", text: "Not one of the genes screened for drugs. Only the top " + m.targets_per_cell_type +
+      " genes higher in AD per cell type were screened." }));
+    return;
+  }
+  out.appendChild(el("p", { text: "Drug target for: " + tg.map(function (t) { return ctName(t.cell_type) + " (rank " + t.rank + ")"; }).join(", ") + "." }));
+  out.appendChild(el("p", { cls: "note", text: NOT_COMPARABLE }));
+  var drugs = IDX.drugsBySym.get(symbol) || [];
+  out.appendChild(el("h3", { text: "Approved drugs" }));
+  out.appendChild(el("p", { cls: "note", text: APPROX_RANKING }));
+  var dist = D.annotations.distributions.targets[symbol];
+  if (dist) distributionFigure(out, symbol, dist);
+  approvedTable(out, drugs.filter(function (r) { return r.type === "approved drug"; }), symbol + "_approved_drugs.csv");
+  out.appendChild(el("h3", { text: "Screening hits" }));
+  screeningTable(out, drugs.filter(function (r) { return r.type === "screening hit"; }), symbol + "_screening_hits.csv");
+}
+
+/** Gene view section "Known drugs and druggability": Open Targets tractability, drugs and AD association; ChEMBL activity. */
+function knownDrugsSection(out, symbol) {
+  var g = D.annotations.genes[symbol];
+  var rel = D.annotations.releases;
+  out.appendChild(el("h3", { text: "Known drugs and druggability" }));
+  var sm = el("span", {}, g.sm_label || "none");
+  if (g.sm_family_n) sm.appendChild(el("span", { tip: FAMILY_NOTE, text: " (via a " + g.sm_family_n + "-gene family)" }));
+  out.appendChild(el("dl", { cls: "facts" },
+    el("dt", {}, tip("Tractability, small molecule", tractNote())), el("dd", {}, sm),
+    el("dt", {}, tip("Tractability, antibody", tractNote())), el("dd", { text: abText(g) }),
+    el("dt", {}, tip("Association with AD", "Open Targets overall association score with " + rel.opentargets_disease +
+      ", from 0 (no evidence) to 1. It summarizes published genetic, literature and other evidence; it is not a result of this pipeline.")),
+    el("dd", { text: g.ad_score === null ? "no association in Open Targets" : fmtNum(g.ad_score) })));
+  if (g.ot_symbol !== symbol) {
+    out.appendChild(el("p", { cls: "note", text: "Open Targets lists this gene as " + g.ot_symbol + " (same Ensembl ID, " + g.gene_id + ")." }));
+  }
+
+  out.appendChild(el("h3", { text: OT_DRUGS_TITLE }));
+  if (!g.drugs.length) {
+    out.appendChild(el("p", { cls: "note", text: "None listed in Open Targets." }));
+  } else {
+    makeTable(out, { rows: g.drugs, csvName: symbol + "_known_drugs_opentargets.csv", columns: [
+      { label: "Drug", cls: "cellwrap", text: function (d) { return d.name; } },
+      { label: "Type", text: function (d) { return d.type; } },
+      { label: "Highest stage", note: "The drug's highest clinical stage for any use (Open Targets), not only for this target.",
+        text: function (d) { return d.stage_words; }, value: function (d) { return stageRank(d.stage); } },
+      { label: "Mechanism", cls: "cellwrap", note: "How the drug acts, from its mechanism of action in ChEMBL. 'Via an N-gene family' = the mechanism's target is a protein family or complex of N genes that includes this one.",
+        text: function (d) { return moaText(d); }, cellNote: function (d) { return d.family_n ? FAMILY_NOTE_DRUG : null; } },
+      { label: "ChEMBL ID", cls: "mono", text: function (d) { return d.chembl_id; } }] });
+  }
+
+  out.appendChild(el("h3", { text: ACTIVITY_TITLE }));
+  var known = g.chembl_known;
+  var scored = !!D.annotations.distributions.targets[symbol];
+  var lead = g.chembl_status === "no single-protein human ChEMBL target"
+    ? "0. ChEMBL has no single-protein human record for this protein."
+    : fmtInt(known.length) + (known.length === 1 ? " drug" : " drugs") + " among the " +
+      fmtInt(D.annotations.distributions.targets[Object.keys(D.annotations.distributions.targets)[0]].n_scored) +
+      " approved drugs scored by DrugCLIP.";
+  out.appendChild(el("p", { text: lead }));
+  out.appendChild(el("p", { cls: "note", text: "Activity data include screening panels, so measured activity does not mean the protein is the drug's intended target." }));
+  if (known.length) {
+    var cols = [
+      { label: "Drug", cls: "cellwrap", text: function (k) { return k.name; } },
+      { label: "Best pChEMBL", note: "Strongest measured activity on this protein: 6 = 1 µM, 7 = 100 nM, 8 = 10 nM.", cls: "num",
+        text: function (k) { return fmtNum(k.pchembl); }, value: function (k) { return k.pchembl; } },
+      { label: "Activity type", note: "The kind of measurement behind the best value (e.g. IC50, Ki, Kd).", text: function (k) { return k.types.replace(/;/g, ", "); } }];
+    if (scored) {
+      cols.push(
+        { label: "Rank among scored drugs", note: "Rank of the drug's predicted binding among all " + fmtInt(D.annotations.distributions.targets[symbol].n_scored) + " scored approved drugs (1 = best).",
+          cls: "num", text: function (k) { return fmtInt(k.rank); }, value: function (k) { return k.rank; } },
+        { label: "Predicted binding", note: "DrugCLIP score on the best structure (as in the approved-drug table).", cls: "num",
+          text: function (k) { return fmtNum(k.z); }, value: function (k) { return k.z; } });
+    }
+    cols.push({ label: "ChEMBL ID", cls: "mono", text: function (k) { return k.chembl_id; } });
+    makeTable(out, { rows: known, csvName: symbol + "_measured_activity_chembl.csv", columns: cols,
+      compare: function (a, b) { return scored ? a.rank - b.rank : b.pchembl - a.pchembl; } });
+  }
+}
+
+/** Position of an Open Targets stage in the build's order (0 = highest); used for sorting only. */
+function stageRank(stage) {
+  return ["APPROVAL", "PHASE_4", "PHASE_3", "PHASE_2_3", "PHASE_2", "PHASE_1_2", "PHASE_1", "EARLY_PHASE_1",
+          "PRECLINICAL", "UNKNOWN"].indexOf(stage);
+}
+
+/** An SVG element with attributes. */
+function svgEl(tag, attrs) {
+  var node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  Object.keys(attrs || {}).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+  return node;
+}
+
+/** The model-check sentence for one scored target, from the build's numbers. */
+var CLASS_NOTE = "A high value can reflect the drug class (for example kinase inhibitors) as well as binding to this specific protein.";
+function checkSentence(dist) {
+  var n = dist.n_known, min = D.annotations.min_known_for_check;
+  if (n < min) {
+    return (n === 0 ? "No scored drug has" : n + (n === 1 ? " scored drug has" : " scored drugs have")) +
+           " measured activity on this protein: too few known drugs to check the model for this target.";
+  }
+  return dist.n_above_median + " of " + n + " known drugs rank above the median; AUROC " + fmtNum(dist.auroc) + ".";
+}
+
+/**
+ * Score distribution of one scored target as inline SVG: gray histogram of best-structure z over every scored
+ * approved drug (bins from the build, the same grid for every target), a dashed line at the top-20 cutoff, and one
+ * tick per drug with measured activity (ChEMBL) below the axis. Every bar and tick has a hover note.
+ */
+function distributionFigure(host, symbol, dist) {
+  var grid = D.annotations.distributions;
+  var W = 640, H = 190, L = 40, R = 12, T = 22, B = 58;   // drawing box inside the viewBox
+  var lo = grid.bin_start, w = grid.bin_width, nb = grid.n_bins, hi = lo + nb * w;
+  var x = function (z) { return L + (z - lo) / (hi - lo) * (W - L - R); };
+  var maxC = Math.max.apply(null, dist.counts);
+  var y = function (c) { return T + (1 - c / maxC) * (H - T - B); };
+  var base = H - B;
+  var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+    "aria-label": "Distribution of predicted binding for " + dist.n_scored + " approved drugs on " + symbol +
+      ", top-20 cutoff at " + fmtNum(dist.top_cutoff) + ", " + dist.n_known + " drugs with measured activity marked." });
+  // y gridline at the tallest bar (recessive), with its count
+  svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: y(maxC), y2: y(maxC), stroke: "#e4e3df", "stroke-width": 1 }));
+  var yl = svgEl("text", { x: L - 6, y: y(maxC) + 4, "text-anchor": "end" }); yl.textContent = fmtInt(maxC); svg.appendChild(yl);
+  var y0 = svgEl("text", { x: L - 6, y: base + 4, "text-anchor": "end" }); y0.textContent = "0"; svg.appendChild(y0);
+  // bars, 2px gap between neighbors
+  dist.counts.forEach(function (c, i) {
+    var a = lo + i * w, b = a + w;
+    var x0 = x(a) + 1, bw = Math.max(1, x(b) - x(a) - 2);
+    if (c > 0) svg.appendChild(svgEl("rect", { x: x0, y: y(c), width: bw, height: base - y(c), fill: "#b9b8b3" }));
+    var hit = svgEl("rect", { x: x(a), y: T, width: x(b) - x(a), height: base - T, fill: "transparent", class: "hit",
+      "data-tip": "Predicted binding " + fmtNum(a) + " to " + fmtNum(b) + ": " + fmtInt(c) + (c === 1 ? " drug" : " drugs"), tabindex: "-1" });
+    svg.appendChild(hit);
+  });
+  // x axis with integer ticks
+  svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: base, y2: base, stroke: "#8a8984", "stroke-width": 1 }));
+  for (var t = Math.ceil(lo); t <= Math.floor(hi); t++) {
+    svg.appendChild(svgEl("line", { x1: x(t), x2: x(t), y1: base, y2: base + 4, stroke: "#8a8984" }));
+    var tl = svgEl("text", { x: x(t), y: base + 15, "text-anchor": "middle" }); tl.textContent = String(t); svg.appendChild(tl);
+  }
+  var xl = svgEl("text", { x: L + (W - L - R) / 2, y: H - 4, "text-anchor": "middle" });
+  xl.textContent = "Predicted binding (best structure; higher = better)"; svg.appendChild(xl);
+  // top-20 cutoff
+  var cx = x(dist.top_cutoff);
+  svg.appendChild(svgEl("line", { x1: cx, x2: cx, y1: T - 8, y2: base, stroke: "#0b0b0b", "stroke-width": 1.5, "stroke-dasharray": "4 3" }));
+  var cl = svgEl("text", { x: cx + 4, y: T - 10 + 8, "text-anchor": "start" });
+  cl.textContent = "top " + D.meta.drug_lists.approved_top; svg.appendChild(cl);
+  svg.appendChild(svgEl("rect", { x: cx - 5, y: T - 8, width: 10, height: base - T + 8, fill: "transparent", class: "hit",
+    "data-tip": "Top-" + D.meta.drug_lists.approved_top + " cutoff: drugs at or right of this line (" + fmtNum(dist.top_cutoff) +
+      ") are in the approved-drug list below.", tabindex: "0" }));
+  // ticks for drugs with measured activity, below the axis
+  dist.known.forEach(function (k) {
+    var kx = x(k.z);
+    svg.appendChild(svgEl("line", { x1: kx, x2: kx, y1: base + 20, y2: base + 32, stroke: "#2a78d6", "stroke-width": 2, "stroke-linecap": "round" }));
+    svg.appendChild(svgEl("rect", { x: kx - 4, y: base + 18, width: 8, height: 16, fill: "transparent", class: "hit", tabindex: "0",
+      "data-tip": k.name + ": rank " + fmtInt(k.rank) + " of " + fmtInt(dist.n_scored) + ", predicted binding " + fmtNum(k.z) +
+        ", best pChEMBL " + fmtNum(k.pchembl) + " (ChEMBL)." }));
+  });
+  var box = el("div", { cls: "dist" });
+  box.appendChild(svg);
+  host.appendChild(box);
+  host.appendChild(el("div", { cls: "legend" },
+    el("span", {}, el("span", { cls: "sw", style: "background:#b9b8b3" }), "All " + fmtInt(dist.n_scored) + " scored approved drugs"),
+    el("span", {}, el("span", { cls: "sw", style: "background:#fff;border:1.5px dashed #0b0b0b" }), "Top-" + D.meta.drug_lists.approved_top + " cutoff"),
+    el("span", {}, el("span", { cls: "sw", style: "background:#2a78d6;border-color:#2a78d6;width:4px" }),
+      tip("Drugs with measured activity (ChEMBL)", ACTIVITY_NOTE))));
+  var sentence = el("p", {}, checkSentence(dist));
+  if (dist.auroc !== null) {
+    sentence.appendChild(document.createTextNode(" " + CLASS_NOTE + " "));
+    sentence.appendChild(el("a", { href: "#about/training", text: "Known drugs may overlap the model's training data (About)." }));
+    sentence.appendChild(el("span", { cls: "note" }, " ", tip("What is AUROC?", AUROC_NOTE)));
+  }
+  host.appendChild(sentence);
+}
+
+/* ------------------------------------------------------------------ cell-type view */
+
+function setupCelltypeView() {
+  var sel = document.getElementById("ct-select");
+  D.meta.cell_types.forEach(function (ct) { sel.appendChild(el("option", { value: ct, text: ctName(ct) })); });
+  sel.addEventListener("change", function () { go("celltype/" + sel.value); });
+}
+
+function showCelltype(ct) {
+  var m = D.meta;
+  if (m.cell_types.indexOf(ct) < 0) ct = m.cell_types[0];
+  document.getElementById("ct-select").value = ct;
+  var out = document.getElementById("ct-result");
+  out.textContent = "";
+  var s = m.per_cell_type[ct];
+  out.appendChild(el("dl", { cls: "facts" },
+    el("dt", { text: "Donors" }), el("dd", { text: s.donors_AD + " AD, " + s.donors_control + " control" }),
+    el("dt", { text: "Genes tested (" + m.de_source_label + ")" }), el("dd", { text: fmtInt(s.tested) }),
+    el("dt", { text: "Significant (" + m.de_source_label + ")" }),
+    el("dd", { text: fmtInt(s.strong_higher) + " higher in AD, " + fmtInt(s.strong_lower) + " lower in AD" +
+                     (s.strong_unclear ? ", " + s.strong_unclear + " unclear" : "") })));
+  if (m.de_source === "wilcoxon") {
+    var facts = out.lastChild;
+    facts.appendChild(el("dt", { text: "Genes tested (donor-level test, pseudobulk DESeq2)" }));
+    facts.appendChild(el("dd", { text: fmtInt(s.donor_tested) + (s.donor_filtered ? " (" + fmtInt(s.donor_filtered) +
+      " of them filtered: low counts, not tested at FDR)" : "") }));
+    facts.appendChild(el("dt", { text: "Significant (donor-level test, pseudobulk DESeq2)" }));
+    facts.appendChild(el("dd", { text: fmtInt(s.donor_significant) }));
+    facts.appendChild(el("dt", { text: "Listed below but not tested by the nucleus-level test (detected in < 10% of nuclei)" }));
+    facts.appendChild(el("dd", { text: fmtInt(s.nucleus_not_tested) }));
+  }
+
+  out.appendChild(el("h2", { text: "Genes" }));
+  var rows = IDX.deByCt.get(ct) || [];
+  makeTable(out, { rows: rows, pageSize: PAGE_SIZE, csvName: m.dataset + "_" + ct + "_genes.csv",
+    compare: deCompare,
+    columns: deColumns({ label: "Gene",
+      text: function (r) { return r.gene_symbol + (IDX.dupSyms.get(ct).has(r.gene_symbol) ? " (" + r.gene_id + ")" : ""); },
+      link: function (r) {
+        var a = geneLink(r.gene_symbol);
+        return IDX.dupSyms.get(ct).has(r.gene_symbol) ? el("span", {}, a, " (" + r.gene_id + ")") : a;
+      } }) });
+
+  out.appendChild(el("h2", {}, tip("Co-expression modules", "Groups of genes whose activity rises and falls together across nuclei; modules are named by color.")));
+  if (!s.modules) {
+    out.appendChild(el("p", { cls: "note", text: "Not available for this cell type." }));
+  } else {
+    var mods = records(D.modules.modules).filter(function (r) { return r.cell_type === ct; });
+    makeTable(out, { rows: mods, csvName: m.dataset + "_" + ct + "_modules.csv",
+      compare: function (a, b) { return a.padj - b.padj; },
+      columns: [
+        { label: "Module", text: function (r) { return r.module; } },
+        { label: "Genes", cls: "num", text: function (r) { return fmtInt(r.n_genes); }, value: function (r) { return r.n_genes; } },
+        { label: "Hub genes", note: "The most connected genes of the module (up to 5 shown).", nosort: true, cls: "cellwrap",
+          text: function (r) {
+            var h = IDX.hubs.get(ct + "|" + r.module) || [];
+            return h.slice(0, 5).map(function (x) { return x.gene_symbol; }).join(", ") + (h.length > 5 ? ", …" : "");
+          } },
+        { label: "Module in AD", note: "Module activity per donor, AD vs control.", text: function (r) { return r.direction; } },
+        { label: "Evidence", note: "Stronger = " + m.module_evidence_rule + ".", text: function (r) { return evidence(r.strong_evidence); },
+          value: function (r) { return r.strong_evidence ? 0 : 1; } },
+        { label: "Adjusted p", note: "Adjusted p-value. Smaller = stronger evidence.", cls: "num",
+          text: function (r) { return fmtP(r.padj); }, value: function (r) { return r.padj; } },
+        { label: "Donors (AD / control)", cls: "num", text: function (r) { return r.n_donors_AD + " / " + r.n_donors_control; }, nosort: true }] });
+  }
+
+  out.appendChild(el("h2", {}, "AD vs control within each cell type (", tip("DEGAS", "A model trained to tell AD from control in bulk " +
+    "brain tissue (MSBB, " + m.bulk_region_name + "), then used to score each nucleus from 0 (control-like) to 1 (AD-like)."), ")"));
+  out.appendChild(el("p", { cls: "note", text: "Overall levels differ between cell types for reasons unrelated to AD; compare AD with control within a row." }));
+  makeTable(out, { rows: records(D.degas.celltypes), csvName: m.dataset + "_AD_vs_control_by_cell_type_DEGAS.csv",
+    compare: function (a, b) { return b.donor_difference - a.donor_difference; },
+    columns: [
+      { label: "Cell type", text: function (r) { return ctName(r.cell_type); } },
+      { label: "AD-likeness (median)", note: "Median score over all nuclei of this cell type (0 = control-like, 1 = AD-like).", cls: "num",
+        text: function (r) { return fmtNum(r.median_score); }, value: function (r) { return r.median_score; } },
+      { label: "Middle half", note: "Range of the middle 50% of nuclei.", cls: "num", nosort: true,
+        text: function (r) { return fmtNum(r.q25) + "–" + fmtNum(r.q75); } },
+      { label: "AD vs control donors", note: "Difference in the donors' median scores, AD minus control.", cls: "num",
+        text: function (r) { return fmtNum(r.donor_difference); }, value: function (r) { return r.donor_difference; } },
+      { label: "Direction", text: function (r) { return r.direction; } },
+      { label: "Adjusted p", note: "Adjusted p-value for the donor comparison. Smaller = stronger evidence.", cls: "num",
+        text: function (r) { return fmtP(r.padj); }, value: function (r) { return r.padj; } },
+      { label: "Donors (AD / control)", cls: "num", nosort: true, text: function (r) { return r.n_donors_AD + " / " + r.n_donors_control; } }] });
+
+  if (m.de_source === "wilcoxon") nucleusLevelSection(out);
+}
+
+/** All cell types: genes significant in the nucleus-level test and whether the donor-level fold change points the same way. */
+function nucleusLevelSection(out) {
+  var nl = D.annotations.nucleus_level;
+  var m = D.meta;
+  out.appendChild(el("h2", { text: "Genes significant in the nucleus-level test (not donor-aware)" }));
+  out.appendChild(el("p", { text: "The main test on this site counts each nucleus separately and does not account for which donor a " +
+    "nucleus came from. These are its genes with " + m.strong_evidence_rule + " in the nucleus-level test. " +
+    fmtInt(nl.n_genes) + " genes in all, by cell type." }));
+  makeTable(out, { rows: nl.rows, csvName: m.dataset + "_nucleus_level_direction_agreement.csv", columns: [
+    { label: "Cell type", text: function (r) { return ctName(r.cell_type); } },
+    { label: "Nucleus-level direction", text: function (r) { return r.direction; } },
+    { label: "Genes", cls: "num", text: function (r) { return fmtInt(r.n); }, value: function (r) { return r.n; } },
+    { label: "Tested in donor-level test", cls: "num", text: function (r) { return fmtInt(r.tested); }, value: function (r) { return r.tested; } },
+    { label: "Same direction", cls: "num", note: "Donor-level log2 fold change (not shrunk) points the same way.",
+      text: function (r) { return fmtInt(r.same); }, value: function (r) { return r.same; } },
+    { label: "Opposite direction", cls: "num", text: function (r) { return fmtInt(r.opposite); }, value: function (r) { return r.opposite; } },
+    { label: "Not tested in donor-level test", cls: "num", note: "The donor-level test filtered the gene out for having too few reads in this cell type.",
+      text: function (r) { return fmtInt(r.not_tested); }, value: function (r) { return r.not_tested; } },
+    { label: "Agreement", cls: "num", note: "Same direction / tested in the donor-level test.",
+      text: function (r) { return r.tested ? (100 * r.same / r.tested).toFixed(1) + "%" : ""; },
+      value: function (r) { return r.tested ? r.same / r.tested : null; } }] });
+  var also = nl.also_significant;
+  out.appendChild(el("p", { cls: "note", text: "Direction agreement means the donor-level fold change points the same way. Both tests use " +
+    "the same donors, so agreement is expected and is not independent confirmation. Only " + also.length + " of these genes " +
+    (also.length === 1 ? "is" : "are") + " significant in the donor-level test." }));
+  var nUnclear = Object.keys(nl.unclear).reduce(function (a, k) { return a + nl.unclear[k]; }, 0);
+  if (nUnclear) {
+    out.appendChild(el("p", { cls: "note", text: nUnclear + " further " + (nUnclear === 1 ? "gene has" : "genes have") +
+      " an unclear direction (the two measures of change disagree) and " + (nUnclear === 1 ? "is" : "are") + " not compared." }));
+  }
+  if (also.length) {
+    var byCt = {};
+    also.forEach(function (a) { (byCt[a.cell_type] = byCt[a.cell_type] || []).push(a); });
+    var parts = Object.keys(byCt).sort().map(function (ct) {
+      var list = byCt[ct], dirs = {};
+      list.forEach(function (a) { dirs[a.direction] = true; });
+      var d = Object.keys(dirs);
+      return list.map(function (a) { return a.gene_symbol; }).join(", ") + " (" + ctName(ct).toLowerCase() +
+             (d.length === 1 ? ", all " + d[0] : "") + ")";
+    });
+    var text = "Genes also significant in the donor-level test (" + m.strong_evidence_rule + "): " + parts.join("; ") + ".";
+    Object.keys(byCt).sort().forEach(function (ct) {
+      if (nl.positive_control[ct] === "INCONCLUSIVE") {
+        text += " In " + ctName(ct).toLowerCase() + " the donor-level test's positive control (known sex differences) " +
+                "was inconclusive, so these results are exploratory.";
+      }
+    });
+    out.appendChild(el("p", { text: text }));
+  }
+}
+
+/* ------------------------------------------------------------------ target overview */
+
+var SM_CLINICAL = ["Approved Drug", "Advanced Clinical", "Phase 1 Clinical"];   // README buckets 1-3 (both modalities)
+
+/** Shading class for a tractability label: clinical buckets, other true labels, none. */
+function tractClass(label) { return !label ? "c-neg" : SM_CLINICAL.indexOf(label) >= 0 ? "c-pos" : "c-mid"; }
+
+function setupOverview() {
+  document.getElementById("ov-one-text").textContent = "Changes in one cell type only (" + mainTestName() + ")";   // one flex item
+  var sel = document.getElementById("ov-ct");
+  sel.appendChild(el("option", { value: "", text: "All cell types" }));
+  D.meta.cell_types.forEach(function (ct) { sel.appendChild(el("option", { value: ct, text: ctName(ct) })); });
+  ["ov-ct", "ov-known", "ov-scored", "ov-one"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", showOverview);
+  });
+}
+
+/** Short name of the site's main DE test, from the build's de_source (as the gene tables use it). */
+function mainTestName() { return D.meta.de_source === "wilcoxon" ? "nucleus-level test" : "donor-level test"; }
+
+/** Column definitions of the target scorecard (screen text = CSV text). */
+function scorecardColumns() {
+  var rel = D.annotations.releases;
+  return [
+    { label: "Gene", text: function (r) { return r.gene_symbol; }, link: function (r) { return geneLink(r.gene_symbol); } },
+    { label: "Cell types (rank)", cls: "cellwrap", note: "Cell types in which this gene is a drug target, with its rank there (1 = most higher in AD).",
+      text: function (r) { return r.cell_types.map(function (c) { return ctName(c.cell_type) + " (" + c.rank + ")"; }).join("; "); },
+      value: function (r) { return Math.min.apply(null, r.cell_types.map(function (c) { return c.rank; })); } },
+    { label: "Cell types higher in AD (" + mainTestName() + ")", cls: "num", note: "Number of cell types where this gene is higher in AD in the " +
+      mainTestName() + " (" + D.meta.strong_evidence_rule + "). 1 = changes in one cell type only.",
+      text: function (r) { return String(r.n_ct_strong_higher); }, value: function (r) { return r.n_ct_strong_higher; },
+      cellNote: function (r) { return r.ct_strong_higher.length ? ctNames(r.ct_strong_higher.join(", ")) : null; } },
+    { label: "Donor-level test", note: "Direction in the donor-level test, in the cell types where this gene is a target.",
+      text: function (r) { return r.donor_level; },
+      cls: function (r) { return "cellwrap " + (r.donor_level === "mixed" || r.donor_level.indexOf("opposite") === 0 ? "c-warn" : "c-neg"); },
+      cellNote: function (r) { return Object.keys(r.donor_by_ct).sort().map(function (ct) { return ctName(ct) + ": " + r.donor_by_ct[ct]; }).join("; "); } },
+    { label: "Bulk tissue", note: "Also different in AD in bulk brain tissue (MSBB).",
+      text: function (r) { return r.bulk ? "yes" : "no"; }, cls: function (r) { return r.bulk ? "c-pos" : "c-neg"; } },
+    { label: "Module with stronger evidence", note: "In a co-expression module whose activity differs between AD and control donors (" +
+      D.meta.module_evidence_rule + "), in any cell type.",
+      text: function (r) { return r.strong_modules.length ? "yes" : "no"; }, cls: function (r) { return r.strong_modules.length ? "c-pos" : "c-neg"; },
+      cellNote: function (r) { return r.strong_modules.length ? r.strong_modules.join("; ") : null; } },
+    { label: "AD association", cls: "num", note: "Open Targets overall association score with Alzheimer disease (" + rel.opentargets_disease +
+      "), 0 to 1. Published evidence, not a result of this pipeline.",
+      text: function (r) { return r.ad_score === null ? "no association" : fmtNum(r.ad_score); }, value: function (r) { return r.ad_score; } },
+    { label: "Small molecule", cls: function (r) { return "cellwrap " + tractClass(r.sm_label); }, note: "Tractability for small molecules. " + tractNote(),
+      text: function (r) { return smText(r); }, value: function (r) { return r.sm_label ? SM_BUCKET_ORDER.indexOf(r.sm_label) : 99; },
+      cellNote: function (r) { return r.sm_family_n ? FAMILY_NOTE : null; } },
+    { label: "Antibody", cls: function (r) { return "cellwrap " + tractClass(r.ab_label); }, note: "Tractability for antibodies. " + tractNote(),
+      text: function (r) { return abText(r); }, value: function (r) { return r.ab_label ? AB_BUCKET_ORDER.indexOf(r.ab_label) : 99; } },
+    { label: "Known drugs", note: OT_DRUGS_TITLE + ": the highest stage reached by any of them, and how many there are.",
+      text: function (r) { return r.known_drug_stage ? r.known_drug_stage + " (" + r.n_known_drugs + ")" : "none"; },
+      value: function (r) { return r.known_drug_stage ? stageRankWords(r.known_drug_stage) : 99; },
+      cls: function (r) { return !r.known_drug_stage ? "c-neg" : r.known_drug_stage === "approved" ? "c-pos" : "c-mid"; } },
+    { label: "Approved-drug scores", cls: function (r) { return "cellwrap " + (r.approved_scores === "tested" ? "c-pos" : "c-neg"); },
+      note: "Whether approved drugs were scored against this protein's structures (DrugCLIP), or why not (hover for the full reason).",
+      text: function (r) { return r.approved_scores === "tested" ? "scored" : "not tested (" + (SHORT_REASON[r.approved_reason] || r.approved_reason) + ")"; },
+      cellNote: function (r) { return r.approved_reason; } },
+    { label: "Screening hits", note: "Whether GenomeScreenDB has screening hits for this protein.",
+      text: function (r) { return r.screening_hits; }, cls: function (r) { return r.screening_hits === "yes" ? "c-pos" : "c-neg"; },
+      cellNote: function (r) { return r.screening_reason; } },
+    { label: "Model check", cls: function (r) { return "cellwrap " + (r.model_check.status === "checked" ? "c-pos" : r.model_check.status === "not scored" ? "c-neg" : "c-mid"); },
+      note: "How well approved drugs with measured activity on this protein (ChEMBL) rank among all scored drugs. " + AUROC_NOTE +
+        " Shown only with at least " + D.annotations.min_known_for_check + " such drugs.",
+      text: function (r) {
+        var c = r.model_check;
+        if (c.status === "checked") return "AUROC " + fmtNum(c.auroc) + " (" + c.n_known + " known drugs)";
+        if (c.status === "too few known drugs") return "too few known drugs (" + c.n_known + ")";
+        return "not scored";
+      },
+      value: function (r) { return r.model_check.auroc === null ? (r.model_check.status === "not scored" ? 2 : 1.5) : -r.model_check.auroc; } },
+    { label: "Note", cls: function (r) { return "cellwrap" + (r.note ? " c-warn" : ""); }, text: function (r) { return r.note || ""; } }];
+}
+var SHORT_REASON = { "no X-ray or cryo-EM structure at 3.5 \u00c5 or better": "no structure",
+                     "no structure with a usable bound ligand (drug-sized, not an additive, on this protein)": "no ligand-bound structure",
+                     "not in GenomeScreenDB": "not in GenomeScreenDB",
+                     "in GenomeScreenDB, but no screening hits listed": "no hits listed",
+                     "no protein ID found for this gene": "no protein ID",
+                     "gene encodes no protein (non-coding RNA); not a structure-based target": "no protein product" };
+var SM_BUCKET_ORDER = ["Approved Drug", "Advanced Clinical", "Phase 1 Clinical", "Structure with Ligand", "High-Quality Ligand",
+                       "High-Quality Pocket", "Med-Quality Pocket", "Druggable Family"];
+var AB_BUCKET_ORDER = ["Approved Drug", "Advanced Clinical", "Phase 1 Clinical", "UniProt loc high conf", "GO CC high conf",
+                       "UniProt loc med conf", "UniProt SigP or TMHMM", "GO CC med conf", "Human Protein Atlas loc"];
+function stageRankWords(words) {
+  return ["approved", "phase 4", "phase 3", "phase 2/3", "phase 2", "phase 1/2", "phase 1", "early phase 1", "preclinical", "unknown phase"].indexOf(words);
+}
+
+function showOverview() {
+  var ct = document.getElementById("ov-ct").value;
+  var known = document.getElementById("ov-known").checked;
+  var scored = document.getElementById("ov-scored").checked;
+  var one = document.getElementById("ov-one").checked;
+  var rows = D.annotations.scorecard.filter(function (r) {
+    return (!ct || r.cell_types.some(function (c) { return c.cell_type === ct; })) && (!known || r.n_known_drugs > 0) &&
+           (!scored || r.approved_scores === "tested") && (!one || r.n_ct_strong_higher === 1);
+  });
+  var out = document.getElementById("ov-result");
+  out.textContent = "";
+  out.appendChild(el("p", { cls: "note", text: "One row per drug-target gene (the top " + D.meta.targets_per_cell_type +
+    " genes higher in AD per cell type). Known drugs = " + OT_DRUGS_TITLE.charAt(0).toLowerCase() + OT_DRUGS_TITLE.slice(1) + "." }));
+  out.appendChild(el("div", { cls: "legend" },
+    el("span", {}, el("span", { cls: "sw", style: "background:#cde2fb" }), "present / available"),
+    el("span", {}, el("span", { cls: "sw", style: "background:#fbe6b0" }), "partial"),
+    el("span", {}, el("span", { cls: "sw", style: "background:#f0efec" }), "none / not tested / neutral"),
+    el("span", {}, el("span", { cls: "sw", style: "background:#f8d2c4" }), "caution (e.g. donor-level test opposite or mixed)"),
+    el("span", {}, "Shading follows the text, which always shows the value.")));
+  var name = D.meta.dataset + "_target_overview" + (ct ? "_" + ct : "") + (known ? "_known_drugs" : "") +
+             (scored ? "_scored" : "") + (one ? "_one_cell_type" : "") + ".csv";
+  makeTable(out, { rows: rows, csvName: name, columns: scorecardColumns(), tableClass: "compact",
+    compare: function (a, b) { return a.gene_symbol.localeCompare(b.gene_symbol); } });
+}
+
+/* ------------------------------------------------------------------ drug view */
+
+/** Order drug rows: tested rows by gene, pocket number and rank, then "not tested" rows by gene. */
+function drugOrder(a, b) {
+  var at = a.status === "tested" ? 0 : 1, bt = b.status === "tested" ? 0 : 1;
+  var pn = function (r) { return r.pocket ? Number(IDX.pocketLabel.get(r.gene_symbol + "|" + r.pocket).slice(7)) : 0; };
+  return (at - bt) || a.gene_symbol.localeCompare(b.gene_symbol) || (pn(a) - pn(b)) || ((a.rank || 0) - (b.rank || 0));
+}
+
+/** The fixed notes (meta target_notes) of the targets present in these rows: one line each, above the table. */
+function noteLines(host, rows) {
+  var shown = {};
+  rows.forEach(function (r) { shown[r.gene_symbol] = true; });
+  (D.meta.target_notes || []).forEach(function (line) {
+    var genes = line.genes.filter(function (g) { return shown[g]; });
+    if (genes.length) {
+      host.appendChild(el("p", { cls: "note" }, el("strong", { text: genes.join(" and ") + ": " }), line.text));
+    }
+  });
+}
+
+function approvedTable(host, rows, csvName, pageSize) {
+  noteLines(host, rows);
+  makeTable(host, { rows: rows, csvName: csvName, pageSize: pageSize, compare: drugOrder, tableClass: "tight", columns: [
+    { label: "Target gene", text: function (r) { return r.gene_symbol; }, link: function (r) { return geneLink(r.gene_symbol); } },
+    { label: "Cell types", note: "Cell types in which this gene was chosen as a target.", cls: "cellwrap", text: function (r) { return ctNames(r.cell_types); } },
+    { label: "Rank", cls: "num", text: function (r) { return r.rank === null ? "" : String(r.rank); }, value: function (r) { return r.rank; } },
+    { label: "Drug", cls: "cellwrap", note: "The parent compound's name in ChEMBL (the structure that was scored).",
+      text: function (r) { return r.name || ""; } },
+    { label: "Known action (ChEMBL)", cls: "cellwrap",
+      note: "What the drug is known to do at its own established target, from ChEMBL. Not how it would act on the gene in this row.",
+      text: function (r) { return r.moa || ""; } },
+    { label: ACTIVITY_LABEL, note: ACTIVITY_NOTE, text: function (r) { return r.known_active ? "yes" : ""; } },
+    { label: "Consistent across structures", cls: "cellwrap", note: "Yes = also among the " + D.meta.drug_lists.consistent_top +
+      " drugs with the best lowest score, i.e. scores well on every structure. 'Single structure' = only one structure available.",
+      text: function (r) { return r.consistent || ""; } },
+    { label: "Note", cls: "cellwrap", text: function (r) { return r.reason || r.note || ""; } },
+    { label: "ChEMBL ID", note: "Identifier in ChEMBL, a public database of approved drugs and other bioactive molecules.", cls: "mono",
+      text: function (r) { return r.compound_id || ""; } },
+    { label: "Predicted binding", note: "How well the drug is predicted to fit the protein's binding pocket, compared with a large reference library (higher = better; best structure).",
+      cls: "num", text: function (r) { return fmtNum(r.score); }, value: function (r) { return r.score; } },
+    { label: "Lowest score", note: "The same score on the protein structure where the drug scored worst.",
+      cls: "num", text: function (r) { return fmtNum(r.score_min); }, value: function (r) { return r.score_min; } }] });
+}
+
+function screeningTable(host, rows, csvName, pageSize) {
+  makeTable(host, { rows: rows, csvName: csvName, pageSize: pageSize, compare: drugOrder, columns: [
+    { label: "Target gene", text: function (r) { return r.gene_symbol; }, link: function (r) { return geneLink(r.gene_symbol); } },
+    { label: "Cell types", note: "Cell types in which this gene was chosen as a target.", cls: "cellwrap", text: function (r) { return ctNames(r.cell_types); } },
+    { label: "Pocket", note: "Predicted binding pocket on the protein's AlphaFold model, numbered per gene. Hover for the GenomeScreenDB ID; the CSV holds the full ID.",
+      text: function (r) { return r.pocket ? IDX.pocketLabel.get(r.gene_symbol + "|" + r.pocket) : ""; },
+      cellNote: function (r) { return r.pocket || null; }, csv: function (r) { return r.pocket || ""; },
+      value: function (r) { return r.pocket ? Number(IDX.pocketLabel.get(r.gene_symbol + "|" + r.pocket).slice(7)) : null; } },
+    { label: "Rank", note: "Rank within the pocket.", cls: "num", text: function (r) { return r.rank === null ? "" : String(r.rank); }, value: function (r) { return r.rank; } },
+    { label: "Compound", note: "Catalog ID of the screening compound (not an approved drug).",
+      cls: function (r) { return r.status === "tested" ? "mono" : null; },
+      text: function (r) { return r.status === "tested" ? r.compound_id : r.name; } },
+    { label: "Note", cls: "cellwrap", text: function (r) { return r.reason || ""; } },
+    { label: "Screening score", note: "GenomeScreenDB's score: higher = stronger predicted binding. Not on the same scale as approved-drug scores.",
+      cls: "num", text: function (r) { return fmtNum(r.score); }, value: function (r) { return r.score; } }] });
+}
+
+var drugTab = "approved";
+
+function setupDrugView() {
+  var sel = document.getElementById("drug-ct");
+  sel.appendChild(el("option", { value: "", text: "All cell types" }));
+  D.meta.cell_types.forEach(function (ct) { sel.appendChild(el("option", { value: ct, text: ctName(ct) })); });
+  sel.addEventListener("change", showDrugs);
+  document.getElementById("drug-gene").addEventListener("input", showDrugs);
+  document.getElementById("drug-known").addEventListener("change", showDrugs);
+  ["approved", "screening"].forEach(function (t) {
+    document.getElementById("tab-" + t).addEventListener("click", function () { drugTab = t; showDrugs(); });
+  });
+}
+
+function showDrugs() {
+  document.getElementById("tab-approved").setAttribute("aria-selected", String(drugTab === "approved"));
+  document.getElementById("tab-screening").setAttribute("aria-selected", String(drugTab === "screening"));
+  var q = document.getElementById("drug-gene").value.trim().toUpperCase();
+  var ct = document.getElementById("drug-ct").value;
+  var type = drugTab === "approved" ? "approved drug" : "screening hit";
+  var onlyKnown = drugTab === "approved" && document.getElementById("drug-known").checked;
+  document.getElementById("drug-checks").hidden = drugTab !== "approved";
+  var rows = IDX.drugs.filter(function (r) {
+    return r.type === type && (!q || r.gene_symbol.toUpperCase().indexOf(q) === 0) &&
+           (!ct || r.cell_types.split(", ").indexOf(ct) >= 0) && (!onlyKnown || r.known_active === true);
+  });
+  var out = document.getElementById("drug-result");
+  out.textContent = "";
+  var name = D.meta.dataset + "_" + (drugTab === "approved" ? "approved_drugs" : "screening_hits") +
+             (ct ? "_" + ct : "") + (q ? "_" + q : "") + (onlyKnown ? "_measured_activity" : "") + ".csv";
+  if (drugTab === "approved") {
+    out.appendChild(el("p", { cls: "note", text: "Top " + D.meta.drug_lists.approved_top + " approved drugs per target, scored with ",
+    }, tip("DrugCLIP", "An AI model that predicts how well a molecule fits a protein's binding pocket."),
+      " on experimental protein structures."));
+    out.appendChild(el("p", { cls: "note", text: NOT_COMPARABLE }));
+    out.appendChild(el("p", { cls: "note", text: APPROX_RANKING }));
+    if (onlyKnown) out.appendChild(el("p", { cls: "note", text: "Showing only drugs with measured activity on the target in ChEMBL. " +
+      "Activity data include screening panels, so measured activity does not mean the protein is the drug's intended target." }));
+    approvedTable(out, rows, name, PAGE_SIZE);
+  } else {
+    out.appendChild(el("p", { cls: "note" }, "Best-scoring screening compounds per binding pocket, from ",
+      tip("GenomeScreenDB", "Precomputed DrugCLIP screens of a large compound library against predicted pockets of human proteins."), "."));
+    out.appendChild(el("p", { cls: "note", text: NOT_COMPARABLE }));
+    screeningTable(out, rows, name, PAGE_SIZE);
+  }
+}
+
+/* ------------------------------------------------------------------ about */
+
+function showAbout() {
+  var m = D.meta;
+  var out = document.getElementById("view-about");
+  if (out.childNodes.length) return;
+  out.appendChild(el("h2", { text: "Where the data come from" }));
+  out.appendChild(el("p", { text: m.dataset_description }));
+  out.appendChild(el("p", {}, "Bulk brain tissue: ", tip("MSBB", "Mount Sinai Brain Bank."),
+    ", " + m.bulk_region_name + "; AD = Braak stage 5–6, control = Braak stage 0–2."));
+
+  out.appendChild(el("h2", { text: "Steps" }));
+  out.appendChild(el("ul", { cls: "steps" },
+    el("li", {}, el("strong", { text: "Change in AD: " }), (m.de_source === "wilcoxon"
+      ? "within each cell type, each gene is compared between nuclei from AD and control donors, counting every nucleus separately. This is the main test on this site."
+      : "within each cell type, each gene is compared between AD and control donors, after adding up each donor's nuclei.")),
+    el("li", {}, el("strong", { text: "Donor-level test: " }), "the same comparison after adding up each donor's nuclei; more conservative (",
+      tip("DESeq2", "A standard statistics package for comparing gene activity between groups of samples."), ")."),
+    el("li", {}, el("strong", { text: "Co-expression modules: " }), "genes that rise and fall together are grouped (",
+      tip("hdWGCNA", "A method that finds groups of co-expressed genes in single-cell data."), "), and each module is compared between AD and control donors."),
+    el("li", {}, el("strong", { text: "AD-likeness: " }), tip("DEGAS", "Diagnostic Evidence GAuge of Single cells: a model that transfers AD/control labels from bulk tissue to single nuclei."),
+      " learns AD vs control from bulk brain tissue and scores each nucleus for how AD-like it looks."),
+    el("li", {}, el("strong", { text: "Drug targets: " }), "in each cell type, the top " + m.targets_per_cell_type + " genes higher in AD."),
+    el("li", {}, el("strong", { text: "Approved drugs: " }), tip("DrugCLIP", "An AI model that predicts how well a molecule fits a protein's binding pocket."),
+      " scores approved drugs (", tip("ChEMBL", "A public database of approved drugs and other bioactive molecules."),
+      ") against the binding pockets of each target's experimental structures. Approved drugs exclude inorganic ",
+      "compounds and most diagnostic agents (contrast media, imaging tracers)."),
+    el("li", {}, el("strong", { text: "Screening hits: " }), "the best-scoring screening compounds for each target's predicted pockets, from ",
+      tip("GenomeScreenDB", "Precomputed DrugCLIP screens of a large compound library against predicted pockets of human proteins."), ".")));
+
+  out.appendChild(el("h2", { text: "Check that the drug model works" }));
+  var ctl = m.controls.map(function (c) { return c.gene + " " + fmtNum(c.auroc) + " (" + c.known_ligands + " known drugs)"; }).join(", ");
+  out.appendChild(el("p", { text: "Known drugs for two well-studied proteins ranked well above chance: " + ctl +
+    ", on a scale where 0.5 is chance and 1 is perfect. These two proteins are controls, not AD candidates, and are left out of the tables." }));
+  out.appendChild(el("p", { id: "about-training", text: "The same check is run for every scored target with at least " + D.annotations.min_known_for_check +
+    " approved drugs that have measured activity on it in ChEMBL (pChEMBL 6 or higher, the rule used for the two controls); its result " +
+    "is shown under each target's score distribution and in the Target overview. Known drugs ranking well can partly reflect molecules " +
+    "the model saw in training, so a good check supports the list but does not prove it." }));
+
+  out.appendChild(el("h2", { text: "Methods" }));
+  out.appendChild(el("p", {}, "Which test produced each result, the thresholds and the multiple-testing correction: ",
+    el("a", { href: "methods.md", text: "methods" }), "; every column of the data: ",
+    el("a", { href: "data_dictionary.md", text: "data dictionary" }), "."));
+
+  out.appendChild(el("h2", { text: "License" }));
+  out.appendChild(el("p", {}, "DrugCLIP and GenomeScreenDB: Jia Y, Gao B, Tan J, et al. Deep contrastive learning enables genome-wide virtual screening. ",
+    "Science 391(6781):eads9530 (2026). ", el("a", { href: "https://doi.org/10.1126/science.ads9530", text: "doi:10.1126/science.ads9530" }), "."));
+  out.appendChild(el("p", {}, "Approved-drug scores were made with the DrugCLIP model weights, whose outputs are licensed ",
+    el("a", { href: "https://creativecommons.org/licenses/by-nc/4.0/", text: "CC BY-NC 4.0" }),
+    " (attribution, non-commercial use only). Screening hits come from GenomeScreenDB, licensed ",
+    el("a", { href: "https://creativecommons.org/licenses/by/4.0/", text: "CC BY 4.0" }),
+    " (attribution). Licenses as stated in the authors' repository, github.com/THU-ATOM/Drug-The-Whole-Genome."));
+  out.appendChild(el("p", {}, "Approved drugs, their names and their known actions: ",
+    tip("ChEMBL", "A public database of approved drugs and other bioactive molecules."), " release " +
+    m.chembl.release.replace("ChEMBL_", "") + " (" + m.chembl.release_date + "; ",
+    el("a", { href: "https://doi.org/10.6019/CHEMBL.database." + m.chembl.release.replace("ChEMBL_", ""),
+              text: "doi:10.6019/CHEMBL.database." + m.chembl.release.replace("ChEMBL_", "") }),
+    "), known actions retrieved " + m.chembl.moa_fetched + ". Zdrazil B, Felix E, Hunter F, et al. The ChEMBL Database in 2023: " +
+    "a drug discovery platform spanning multiple bioactivity data types and time periods. Nucleic Acids Res 52(D1):D1180–D1192 (2024), ",
+    el("a", { href: "https://doi.org/10.1093/nar/gkad1004", text: "doi:10.1093/nar/gkad1004" }),
+    ". ChEMBL data are licensed ", el("a", { href: "https://creativecommons.org/licenses/by-sa/3.0/", text: "CC BY-SA 3.0" }),
+    " (attribution, share-alike)."));
+
+  var rel = D.annotations.releases;
+  out.appendChild(el("p", {}, "Tractability, drugs and clinical candidates, and association with Alzheimer disease: ",
+    tip("Open Targets Platform", "A public resource that brings together evidence linking genes to diseases and drugs."),
+    " release " + rel.opentargets + " (retrieved " + rel.opentargets_fetched + "; disease " + rel.opentargets_disease +
+    (rel.opentargets_indirect ? ", indirect evidence included" : ", direct evidence only") + "). " +
+    "Buniello A, Suveges D, Cruz-Castillo C, et al. Open Targets Platform: facilitating therapeutic hypotheses building in drug " +
+    "discovery. Nucleic Acids Res 53(D1):D1467–D1475 (2025), ",
+    el("a", { href: "https://doi.org/10.1093/nar/gkae1128", text: "doi:10.1093/nar/gkae1128" }),
+    ". Open Targets Platform data are released under ", el("a", { href: "https://creativecommons.org/publicdomain/zero/1.0/", text: "CC0 1.0" }),
+    ". Tractability labels are ranked by the bucket order in the README of the Open Targets tractability pipeline " +
+    "(github.com/melschneider/tractability_pipeline_v2, commit " + rel.tractability_readme + ")."));
+  out.appendChild(el("p", { text: "Measured activity of approved drugs on each target: ChEMBL release " + rel.chembl.replace("ChEMBL_", "") +
+    ", retrieved " + rel.chembl_fetched + "." }));
+
+  out.appendChild(el("p", { cls: "note", text: "Data built " + m.generated + " from the " + m.dataset + " results of the TREAT-AD v2 pipeline." }));
+}
+
+/* ------------------------------------------------------------------ navigation */
+
+function go(hash) { location.hash = hash; }
+
+var VIEWS = ["gene", "overview", "celltype", "drugs", "about"];
+
+/** Show the view named in the URL hash: #gene/<symbol>, #overview, #celltype/<label>, #drugs, #about. */
+function route() {
+  var parts = location.hash.replace(/^#/, "").split("/");
+  var view = VIEWS.indexOf(parts[0]) >= 0 ? parts[0] : "gene";
+  var arg = parts.length > 1 ? decodeURIComponent(parts.slice(1).join("/")) : "";
+  VIEWS.forEach(function (v) {
+    document.getElementById("view-" + v).hidden = v !== view;
+  });
+  document.querySelectorAll("#nav a").forEach(function (a) {
+    if (a.getAttribute("data-view") === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  if (view === "gene") showGene(arg);
+  else if (view === "overview") showOverview();
+  else if (view === "celltype") showCelltype(arg);
+  else if (view === "drugs") showDrugs();
+  else showAbout();
+  var anchor = view === "about" && arg ? document.getElementById("about-" + arg) : null;   // #about/training
+  if (anchor) anchor.scrollIntoView(); else window.scrollTo(0, 0);
+}
+
+/** Called once all data files are loaded. */
+function init(ds, list) {
+  var box = document.getElementById("dataset");
+  if (list.length > 1) {
+    var sel = el("select", { id: "ds-select", "aria-label": "Dataset" });
+    list.forEach(function (d) { sel.appendChild(el("option", { value: d, text: d === ds ? D.meta.dataset_label : d })); });
+    sel.value = ds;
+    sel.addEventListener("change", function () { location.search = "?dataset=" + encodeURIComponent(sel.value); });
+    box.appendChild(el("label", { for: "ds-select", text: "Dataset" }));
+    box.appendChild(sel);
+  } else {
+    box.appendChild(el("span", {}, el("strong", { text: "Dataset: " }), D.meta.dataset_label));
+  }
+  buildIndex();
+  setupTooltips();
+  setupGeneView();
+  setupCelltypeView();
+  setupOverview();
+  setupDrugView();
+  setStatus("");
+  window.addEventListener("hashchange", route);
+  route();
+}
+
+start();
+</script>
+<footer style="font-size:12.5px;color:#5f5e5a;max-width:1100px;margin:24px auto;padding:0 16px"><div class="wrap">
+<p>build_site_pages v1.10, build_site_data green v1.12, mathys2019 v1.12 · treatad-snrna commit 8cac21cb0be8 (code commit when the site was built; it may not match the code that produced the results) · inputs sha256 5ef5c884de63 (<a href="downloads/stamp.json">full list</a>)</p>
+<p>License: <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. Computational predictions to guide follow-up experiments, not validated targets or treatments.</p>
+</div></footer>
+</body>
+</html>
