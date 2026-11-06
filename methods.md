@@ -1,6 +1,6 @@
 # Methods
 
-Generated 2026-10-21 by build_site_data.py v1.12. Datasets: Green et al. 2024 (`green`); Mathys et al. 2019 (`mathys2019`).
+Generated 2026-11-06 by build_site_data.py v1.14. Datasets: Green et al. 2024 (`green`); Mathys et al. 2019 (`mathys2019`); SEA-AD (Gabitto et al. 2024) (`seaad_pfc`).
 
 ## Which test produced which result
 
@@ -24,6 +24,7 @@ Raw counts are summed per donor and cell type (pseudobulk; samples summed from f
 |---|---|---|
 | Green et al. 2024 | `~ sex + condition` | Sex was added as a covariate, chosen before any result of this test was seen, because the two groups differ in sex balance (AD 80 female / 20 male donors, control 40 female / 27 male). |
 | Mathys et al. 2019 | `~ condition` | No covariates are set in this dataset's configuration. |
+| SEA-AD (Gabitto et al. 2024) | `~ sex + condition` | Sex was added as a covariate, chosen before any result of this test was seen, as for Green et al. 2024 (AD 13 female / 7 male donors, control 9 female / 8 male). |
 
 ## Reference gene annotation
 
@@ -31,6 +32,7 @@ Raw counts are summed per donor and cell type (pseudobulk; samples summed from f
 |---|---|
 | Green et al. 2024 | GENCODE version 32 (Ensembl 98), the 10x Genomics GRCh38-2020-A reference (from the header of the reference GTF; Cell Ranger v6.0.0 per the dataset documentation) |
 | Mathys et al. 2019 | reads aligned to the hg38 genome (GRCh38.p5, NCBI GCA_000001405.20) with Cell Ranger 2.0.0, counting reads mapped to pre-mRNA (as stated in the publication's Methods); the gene-annotation release is not stated in the publication |
+| SEA-AD (Gabitto et al. 2024) | GENCODE version 32 (Ensembl 98), the 10x Genomics GRCh38-2020-A reference (the release's 36,601 Ensembl gene IDs match that reference exactly; the release names the genome as GRCh38; Cell Ranger v6.1.2 per the dataset documentation) |
 
 ## Co-expression modules
 
@@ -44,14 +46,15 @@ DEGAS learns AD vs control from bulk RNA-seq of the Mount Sinai Brain Bank (MSBB
 |---|---|---|---|---|
 | Green et al. 2024 | 113 / 75 | 0.792 | 0.801 (10 folds) | 0.560-0.977 |
 | Mathys et al. 2019 | 113 / 75 | 0.769 | 0.787 (10 folds) | 0.571-0.966 |
+| SEA-AD (Gabitto et al. 2024) | 113 / 75 | 0.795 | 0.794 (10 folds) | 0.595-0.977 |
 
-Both datasets use the same MSBB patients and the same patient folds, but each dataset's model is trained together with that dataset's nuclei and uses genes selected partly from them, so the held-out predictions and AUCs differ between datasets. Each held-out fold has only 18-19 patients, so fold AUCs vary widely; the pooled AUC is the steadier figure.
+All datasets use the same MSBB patients and the same patient folds, but each dataset's model is trained together with that dataset's nuclei and uses genes selected partly from them, so the held-out predictions and AUCs differ between datasets. Each held-out fold has only 18-19 patients, so fold AUCs vary widely; the pooled AUC is the steadier figure.
 
 Per cell type, each donor's mean nucleus score is compared between AD and control donors (Wilcoxon rank-sum); p-values are Benjamini-Hochberg adjusted across cell types.
 
 ## Drug targets
 
-For Green et al. 2024 and Mathys et al. 2019: in each cell type, the top 10 genes higher in AD (log2 fold change > 0) in the nucleus-level test (Wilcoxon, step 11b), ranked by the Wilcoxon rank-sum z-score (largest first; ties by p-value, then gene ID). Mitochondrially encoded and ribosomal protein genes are removed before ranking, so the next genes fill the list. A gene chosen in several cell types is one target. Choosing targets never depends on whether drugs or structures exist for them.
+For Green et al. 2024 and Mathys et al. 2019 and SEA-AD (Gabitto et al. 2024): in each cell type, the top 10 genes higher in AD (log2 fold change > 0) in the nucleus-level test (Wilcoxon, step 11b), ranked by the Wilcoxon rank-sum z-score (largest first; ties by p-value, then gene ID). Mitochondrially encoded and ribosomal protein genes are removed before ranking, so the next genes fill the list. A gene chosen in several cell types is one target. Choosing targets never depends on whether drugs or structures exist for them.
 
 ## Drug scores
 
@@ -61,9 +64,9 @@ Screening hits (step 14a): GenomeScreenDB holds precomputed DrugCLIP screens of 
 
 Column definitions: [data_dictionary.md](data_dictionary.md).
 
-## Genes with different Ensembl IDs in the two datasets
+## Genes with different Ensembl IDs in different datasets
 
-15 gene symbols are attached to different Ensembl gene IDs in the two datasets (or, for 2 of them, to two IDs within one dataset): AGBL1, ARHGAP11B, C2orf81, CCDC39, CCDC7, CRHR1, CRIPAK, FAM169B, GGT1, HSPA14, IQCJ-SCHIP1, PIK3R3, SCO2, TBCE, TIMM10B. Ensembl IDs of the same gene change between annotation releases, which is the likely reason, but the release used for Mathys et al. 2019 is not recorded in the data files, so this is not confirmed. Each gene page is keyed by Ensembl ID and named by the current NCBI symbol; IDs that NCBI gives the same symbol share one page, with a section per ID.
+18 gene symbols are attached to different Ensembl gene IDs in different datasets (or, for 2 of them, to two IDs within one dataset): AC006538.4, AGBL1, AL365181.2, ARHGAP11B, C2orf81, CCDC39, CCDC7, CRHR1, CRIPAK, FAM169B, GGT1, HSPA14, IQCJ-SCHIP1, PIK3R3, PRICKLE4, SCO2, TBCE, TIMM10B. Ensembl IDs of the same gene change between annotation releases, which is the likely reason, but the release used for Mathys et al. 2019 is not recorded in the data files, so this is not confirmed. Each gene page is keyed by Ensembl ID and named by the current NCBI symbol; IDs that NCBI gives the same symbol share one page, with a section per ID.
 
 ## Figures, structures and links on the gene pages
 
@@ -75,6 +78,7 @@ The data analyzed here were generated by the following studies:
 
 - Mathys H, et al. Single-cell transcriptomic analysis of Alzheimer's disease. Nature 2019;570(7761):332-337. [doi:10.1038/s41586-019-1195-2](https://doi.org/10.1038/s41586-019-1195-2)
 - Green GS, et al. Cellular communities reveal trajectories of brain ageing and Alzheimer's disease. Nature 2024;633(8030):634-645. [doi:10.1038/s41586-024-07871-6](https://doi.org/10.1038/s41586-024-07871-6)
+- Gabitto MI, et al. Integrated multimodal cell atlas of Alzheimer's disease. Nature Neuroscience 2024;27(12):2366-2383. [doi:10.1038/s41593-024-01774-5](https://doi.org/10.1038/s41593-024-01774-5)
 - Wang M, et al. The Mount Sinai cohort of large-scale genomic, transcriptomic and proteomic data in Alzheimer's disease. Scientific Data 2018;5:180185. [doi:10.1038/sdata.2018.185](https://doi.org/10.1038/sdata.2018.185)
 
 ## Attribution
@@ -97,9 +101,17 @@ The results published here are in whole or in part based on data obtained from T
 
 Study DOI: [https://doi.org/10.7303/9618238](https://doi.org/10.7303/9618238)
 
+**SEA-AD (Seattle Alzheimer's Disease Brain Cell Atlas, Allen Institute; Gabitto et al. 2024)**
+
+Seattle Alzheimer's Disease Brain Cell Atlas (SEA-AD) was accessed on 2026-10-22 from https://registry.opendata.aws/allen-sea-ad-atlas.
+
+Funding: The Seattle Alzheimer's Disease Brain Cell Atlas (SEA-AD) is funded by the National Institute on Aging (NIA U19AG060909).
+
+Dataset: [https://registry.opendata.aws/allen-sea-ad-atlas](https://registry.opendata.aws/allen-sea-ad-atlas)
+
 ### Data availability
 
-The ROSMAP single-nucleus RNA sequencing data from Mathys et al. 2019 (Synapse syn18485175) and Green et al. 2024 (Synapse syn31512863), and the Mount Sinai Brain Bank (MSBB) bulk RNA sequencing data, are available via the AD Knowledge Portal (https://adknowledgeportal.org). The AD Knowledge Portal is a platform for accessing data, analyses, and tools generated by the Accelerating Medicines Partnership (AMP-AD) Target Discovery Program and other National Institute on Aging (NIA)-supported programs to enable open-science practices and accelerate translational learning. The data, analyses and tools are shared early in the research cycle without a publication embargo on secondary use. Data is available for general research use according to the following requirements for data access and data attribution (https://adknowledgeportal.synapse.org/Data%20Access). For access to the data resources described here, see https://doi.org/10.7303/9618239 (ROSMAP) and https://doi.org/10.7303/9618238 (MSBB).
+The ROSMAP single-nucleus RNA sequencing data from Mathys et al. 2019 (Synapse syn18485175) and Green et al. 2024 (Synapse syn31512863), and the Mount Sinai Brain Bank (MSBB) bulk RNA sequencing data, are available via the AD Knowledge Portal (https://adknowledgeportal.org). The AD Knowledge Portal is a platform for accessing data, analyses, and tools generated by the Accelerating Medicines Partnership (AMP-AD) Target Discovery Program and other National Institute on Aging (NIA)-supported programs to enable open-science practices and accelerate translational learning. The data, analyses and tools are shared early in the research cycle without a publication embargo on secondary use. Data is available for general research use according to the following requirements for data access and data attribution (https://adknowledgeportal.synapse.org/Data%20Access). For access to the data resources described here, see https://doi.org/10.7303/9618239 (ROSMAP) and https://doi.org/10.7303/9618238 (MSBB). SEA-AD data are openly available from the AWS Open Data Registry (https://registry.opendata.aws/allen-sea-ad-atlas).
 
 ### Gene descriptions
 

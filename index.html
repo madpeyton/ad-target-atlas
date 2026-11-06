@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AD Target Atlas</title>
-<meta name="description" content="AD gene and drug candidates from single-nucleus RNA-seq (Mathys et al. 2019, Green et al. 2024; ROSMAP prefrontal cortex): per-gene results, methods and downloads.">
+<meta name="description" content="AD gene and drug candidates from single-nucleus RNA-seq of prefrontal cortex (Green et al. 2024; Mathys et al. 2019; SEA-AD (Gabitto et al. 2024)): per-gene results, methods and downloads.">
 <link rel="stylesheet" href="assets/site.css">
 <script type="application/ld+json">
 {
@@ -12,9 +12,9 @@
  "@type": "Dataset",
  "name": "AD Target Atlas",
  "url": "https://madpeyton.github.io/ad-target-atlas/",
- "description": "Alzheimer's disease gene and drug candidates from single-nucleus RNA-seq of human prefrontal cortex (Green et al. 2024; Mathys et al. 2019): per cell type, nucleus-level Wilcoxon and donor-level pseudobulk DESeq2 results, co-expression modules, DEGAS AD-likeness and DrugCLIP drug scores.",
- "version": "2026-10-21 (build_site_pages v1.10)",
- "dateModified": "2026-10-21",
+ "description": "Alzheimer's disease gene and drug candidates from single-nucleus RNA-seq of human prefrontal cortex (Green et al. 2024; Mathys et al. 2019; SEA-AD (Gabitto et al. 2024)): per cell type, nucleus-level Wilcoxon and donor-level pseudobulk DESeq2 results, co-expression modules, DEGAS AD-likeness and DrugCLIP drug scores.",
+ "version": "2026-11-06 (build_site_pages v1.12)",
+ "dateModified": "2026-11-06",
  "license": "https://creativecommons.org/licenses/by-nc/4.0/",
  "creator": {
   "@type": "Person",
@@ -30,7 +30,8 @@
   "single-nucleus RNA-seq",
   "differential expression",
   "drug repurposing",
-  "ROSMAP"
+  "ROSMAP",
+  "SEA-AD"
  ],
  "citation": "The results published here are in whole or in part based on data obtained from the AD Knowledge Portal (NIH-NIA, U24AG061340).",
  "distribution": [
@@ -50,19 +51,20 @@
 </head>
 <body>
 <header><div class="wrap"><a class="name" href="index.html">AD Target Atlas</a> <span class="muted">Results from the TREAT-AD snRNA-seq pipeline</span>
-<nav><a href="index.html">Home</a><a href="genes/index.html">Genes</a><a href="methods.html">Methods</a><a href="data_dictionary.html">Data dictionary</a><a href="index.html#downloads">Downloads</a><a href="explorer.html">Interactive explorer</a></nav></div></header>
+<nav><a href="index.html">Home</a><a href="genes/index.html">Genes</a><a href="degas.html">DEGAS</a><a href="methods.html">Methods</a><a href="data_dictionary.html">Data dictionary</a><a href="index.html#downloads">Downloads</a><a href="explorer.html">Interactive explorer</a></nav></div></header>
 <main class="wrap">
 <h1>AD Target Atlas</h1>
 <p class="muted">Results from the TREAT-AD snRNA-seq pipeline</p>
 <p>Gene and drug candidates for Alzheimer's disease (AD) from single-nucleus RNA sequencing of human prefrontal cortex, produced by the TREAT-AD v2 pipeline. For each cell type, genes are compared between AD and control donors with two tests: a nucleus-level Wilcoxon test (the main test) and a donor-level pseudobulk DESeq2 test; genes are grouped into co-expression modules (hdWGCNA), nuclei are scored for AD-likeness (DEGAS), and approved drugs are ranked against the protein structures of the top genes (DrugCLIP). These are computational predictions to guide follow-up experiments.</p>
-<p>Drug targets: Green et al. 2024: in each cell type, the top 10 genes higher in AD in the nucleus-level test (Wilcoxon, step 11b), ranked by its test statistic, after removing mitochondrial and ribosomal protein genes. Mathys et al. 2019: in each cell type, the top 10 genes higher in AD in the nucleus-level test (Wilcoxon, step 11b), ranked by its test statistic, after removing mitochondrial and ribosomal protein genes. Approved drugs are scored against the targets' experimental structures (DrugCLIP, step 14b) and screening hits are taken from GenomeScreenDB (step 14a); see <a href="methods.html">methods</a>.</p>
-<div class="tablewrap"><table><caption>Datasets. Significant = adjusted p &lt; 0.05; counts are gene x cell-type results.</caption><thead><tr><th scope="col">Dataset</th><th scope="col">Description</th><th scope="col">Cell types</th><th scope="col">Donors per cell type, AD / control</th><th scope="col">Significant, nucleus-level test</th><th scope="col">Significant, donor-level test</th><th scope="col">Explorer</th></tr></thead><tbody><tr><td>Green et al. 2024</td><td>Single-nucleus RNA sequencing of dorsolateral prefrontal cortex from donors in the Religious Orders Study and Rush Memory and Aging Project (Green et al., Nature 2024). AD here means Braak stage 5-6 and control Braak stage 0-2; donors at Braak 3-4 are not analyzed.</td><td class="num">7</td><td>98-100 / 66-67</td><td class="num">39,484</td><td class="num">1,977</td><td><a href="explorer.html?dataset=green">explore</a></td></tr><tr><td>Mathys et al. 2019</td><td>Single-nucleus RNA sequencing of prefrontal cortex from donors in the Religious Orders Study and Rush Memory and Aging Project (Mathys et al., Nature 2019). AD here means a pathological diagnosis of Alzheimer&#x27;s disease.</td><td class="num">6</td><td>21-24 / 20-24</td><td class="num">7,825</td><td class="num">3</td><td><a href="explorer.html?dataset=mathys2019">explore</a></td></tr></tbody></table></div>
-<p><a href="genes/index.html">16,776 gene pages</a> (every gene tested by either test in any dataset). All tested genes are in the downloads and the explorer.</p>
+<p>Drug targets: Green et al. 2024: in each cell type, the top 10 genes higher in AD in the nucleus-level test (Wilcoxon, step 11b), ranked by its test statistic, after removing mitochondrial and ribosomal protein genes. Mathys et al. 2019: in each cell type, the top 10 genes higher in AD in the nucleus-level test (Wilcoxon, step 11b), ranked by its test statistic, after removing mitochondrial and ribosomal protein genes. SEA-AD (Gabitto et al. 2024): in each cell type, the top 10 genes higher in AD in the nucleus-level test (Wilcoxon, step 11b), ranked by its test statistic, after removing mitochondrial and ribosomal protein genes. Approved drugs are scored against the targets' experimental structures (DrugCLIP, step 14b) and screening hits are taken from GenomeScreenDB (step 14a); see <a href="methods.html">methods</a>.</p>
+<div class="tablewrap"><table><caption>Datasets. Significant = adjusted p &lt; 0.05; counts are gene x cell-type results.</caption><thead><tr><th scope="col">Dataset</th><th scope="col">Description</th><th scope="col">Cell types</th><th scope="col">Donors per cell type, AD / control</th><th scope="col">Significant, nucleus-level test</th><th scope="col">Significant, donor-level test</th><th scope="col">Explorer</th></tr></thead><tbody><tr><td>Green et al. 2024</td><td>Single-nucleus RNA sequencing of dorsolateral prefrontal cortex from donors in the Religious Orders Study and Rush Memory and Aging Project (Green et al., Nature 2024). AD here means Braak stage 5-6 and control Braak stage 0-2; donors at Braak 3-4 are not analyzed.</td><td class="num">7</td><td>98-100 / 66-67</td><td class="num">39,484</td><td class="num">1,977</td><td><a href="explorer.html?dataset=green">explore</a></td></tr><tr><td>Mathys et al. 2019</td><td>Single-nucleus RNA sequencing of prefrontal cortex from donors in the Religious Orders Study and Rush Memory and Aging Project (Mathys et al., Nature 2019). AD here means a pathological diagnosis of Alzheimer&#x27;s disease.</td><td class="num">6</td><td>21-24 / 20-24</td><td class="num">7,825</td><td class="num">3</td><td><a href="explorer.html?dataset=mathys2019">explore</a></td></tr><tr><td>SEA-AD (Gabitto et al. 2024)</td><td>Single-nucleus RNA sequencing of prefrontal cortex from the Seattle Alzheimer&#x27;s Disease Brain Cell Atlas (SEA-AD), Allen Institute; open access. AD here means high Alzheimer&#x27;s pathology and dementia (20 donors); control means little or no Alzheimer&#x27;s pathology and no dementia (17 donors).</td><td class="num">6</td><td>20 / 17</td><td class="num">44,649</td><td class="num">48</td><td><a href="explorer.html?dataset=seaad_pfc">explore</a></td></tr></tbody></table></div>
+<p>DEGAS AD-likeness by cell type, with the model's cross-validated accuracy: <a href="degas.html">DEGAS results</a>.</p>
+<p><a href="genes/index.html">30,494 gene pages</a> (every gene tested by either test in any dataset). All tested genes are in the downloads and the explorer.</p>
 <h2 id="downloads">Downloads</h2><ul><li><a href="downloads/results.csv">results.csv</a> and <a href="downloads/results.json">results.json</a>: every gene x cell type x dataset tested by either test (columns: <a href="data_dictionary.html">data dictionary</a>)</li><li>Per gene: <code>genes/&lt;SYMBOL&gt;/&lt;SYMBOL&gt;.json</code> next to each gene page</li><li><a href="downloads/stamp.json">stamp.json</a>: build date, versions and the SHA-256 of every input file</li><li><a href="methods.md">methods.md</a>, <a href="data_dictionary.md">data_dictionary.md</a>, <a href="llms.txt">llms.txt</a></li></ul>
 <h2>Attribution</h2><p>The results published here are in whole or in part based on data obtained from the AD Knowledge Portal (NIH-NIA, U24AG061340). Study acknowledgments and data availability: <a href="methods.html#attribution">methods</a>.</p>
 </main>
 <footer><div class="wrap">
-<p>Last updated 2026-10-21 · build_site_pages v1.10, build_site_data green v1.12, mathys2019 v1.12 · treatad-snrna commit 8cac21cb0be8 (code commit when the site was built; it may not match the code that produced the results) · inputs sha256 5ef5c884de63 (<a href="downloads/stamp.json">full list</a>)</p>
+<p>Last updated 2026-11-06 · build_site_pages v1.12, build_site_data green v1.14, mathys2019 v1.14, seaad_pfc v1.14 · treatad-snrna commit 8cac21cb0be8 (code commit when the site was built; it may not match the code that produced the results) · inputs sha256 9061d3ad7046 (<a href="downloads/stamp.json">full list</a>)</p>
 <p>License: <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. Computational predictions to guide follow-up experiments, not validated targets or treatments.</p>
 </div></footer>
 </body>

@@ -1,15 +1,16 @@
 {
- "last_updated": "2026-10-21",
+ "last_updated": "2026-11-06",
  "site_build": {
-  "build_site_pages": "1.10",
+  "build_site_pages": "1.12",
   "build_site_data": {
-   "green": "1.12",
-   "mathys2019": "1.12"
+   "green": "1.14",
+   "mathys2019": "1.14",
+   "seaad_pfc": "1.14"
   }
  },
  "treatad_snrna_commit": "8cac21cb0be8540c0551579f9bf26266d91f3093",
  "commit_note": "commit of the pipeline code repository when the site was built; it may not match the code version that produced the results",
- "inputs_sha256_combined": "5ef5c884de63cd3b66d8a61cd11d3c2f34ee16cd25363987de5252fec5f30792",
+ "inputs_sha256_combined": "9061d3ad7046ce4e426b8e7ccc063197828ded4aedacbf96f4a8e51b04bc90ca",
  "skipped_datasets": [],
  "license": "CC BY-NC 4.0",
  "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
@@ -789,6 +790,366 @@
    "bytes": 23310
   },
   {
+   "dataset": "seaad_pfc",
+   "file": "config/seaad_pfc.yaml",
+   "sha256": "a5fe7f26dacb5887978f58ae70275a9a32ab44d520ef65d74f9174ef5f137a4d",
+   "bytes": 7201
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11_differential_expression/Ast/de_results.tsv",
+   "sha256": "611f74775ec24f7e12fe404c9640720004701d0c255d1d2f660c986b91c2fc89",
+   "bytes": 3278055
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11_differential_expression/Ex/de_results.tsv",
+   "sha256": "bae410c87ec41e530fcfeaaeca7ea4e6f2008a6deb71e609b6400fd2fec8af20",
+   "bytes": 5109679
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11_differential_expression/In/de_results.tsv",
+   "sha256": "dfc04183a323da6ba1b63a710607a58cb412b398d90dcb6d081de33ca433049d",
+   "bytes": 4600917
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11_differential_expression/Mic/de_results.tsv",
+   "sha256": "05e08cb09112165b95bbf982ee02662fe1f76ec89e54ed762cadf90e556f6a9c",
+   "bytes": 2475530
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11_differential_expression/OPC/de_results.tsv",
+   "sha256": "1a4c481922712f3b16746521c49e5e7fea4c0b618b445df014fb2609145173e4",
+   "bytes": 2612844
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11_differential_expression/Oli/de_results.tsv",
+   "sha256": "367fff11429fbe27933cc580dfd18990057ea879746d73e3ba09f43850b85bda",
+   "bytes": 3151446
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11_differential_expression/seaad_pfc_11_de_summary.tsv",
+   "sha256": "17b30f8b4b7b70a3f728ae83ad1ea9f6ec7aa464b0db2b2e23e546c6a742a188",
+   "bytes": 293
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11b_wilcoxon_de/Ast/de_results.tsv",
+   "sha256": "b2b67602dab5b561dafc2b84c898ef458522007ec8928347987b826f8930967d",
+   "bytes": 1302900
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11b_wilcoxon_de/Ex/de_results.tsv",
+   "sha256": "335b2ee231aebb57cfdaa39f6977beedf4f313f58107a07369d22a0793019f54",
+   "bytes": 1886585
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11b_wilcoxon_de/In/de_results.tsv",
+   "sha256": "964d135023a1e1615255168996e272fc09927f7ea2a799e17d474d7bd44ba48e",
+   "bytes": 1600659
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11b_wilcoxon_de/Mic/de_results.tsv",
+   "sha256": "01f714b58e7f274fbb7353b475dcc28762af74381cd63dfc0d3e6dd8fa315a42",
+   "bytes": 1028066
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11b_wilcoxon_de/OPC/de_results.tsv",
+   "sha256": "2e31e543b28cf4811f13e79734b7086ee97f19e5de70a7de9f7161dee5596e27",
+   "bytes": 1275120
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11b_wilcoxon_de/Oli/de_results.tsv",
+   "sha256": "f7ff5ab58ab256e8a3ea00b59461473d3d5a607d8b744404b3874ccf93d89840",
+   "bytes": 1050199
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/11b_wilcoxon_de/seaad_pfc_11b_comparison.tsv",
+   "sha256": "ce7d987d557c4764479bd9bcfac6cc0eeab05346ac5033bf3ac827ed74b18b3a",
+   "bytes": 496
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Ast/hub_genes.tsv",
+   "sha256": "6cacb857732fe3922debe4ec2a9c1fc90f14f47b5e5e7974fce060980e160f1c",
+   "bytes": 6684
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Ast/module_association.tsv",
+   "sha256": "2564d7d1ca1976eeda380a3553e3a60ce7da314581d13de221a1855f400f5bc8",
+   "bytes": 3234
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Ast/modules.tsv",
+   "sha256": "1d45cd225d21c3fe825a4fea790fc83c23b9f94e80e6b7789bb146cdecbd3bb4",
+   "bytes": 623369
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Ex/hub_genes.tsv",
+   "sha256": "4fba480daf9718bdffc93b36739e08e326e81bc28073e2ad17d43759a9a8b32e",
+   "bytes": 5753
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Ex/module_association.tsv",
+   "sha256": "cb8922610dbe9f541ee5e76f6795490ae0fb590eb79d4dc66e96617c5c499927",
+   "bytes": 2865
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Ex/modules.tsv",
+   "sha256": "40070abbb14902015fd4dbf44ddf02e52f60b1b5b71bcc6c496f25800769015a",
+   "bytes": 834224
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/In/hub_genes.tsv",
+   "sha256": "cb5ca7d177713fdd5472da1e7a42f3cc9fcc98649c315abbcf7589df1a0930aa",
+   "bytes": 7206
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/In/module_association.tsv",
+   "sha256": "6c6de217388401af6e3e4aee5ac76d96b5070fa1b5c2b5c9e7db98203d95be3a",
+   "bytes": 3485
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/In/modules.tsv",
+   "sha256": "a8c95d47b20fc8bbd2c3e3f443cf3cb469ae89df1d78396dfbb0b03406079b33",
+   "bytes": 708399
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Mic/hub_genes.tsv",
+   "sha256": "5e52e7232f930206b9b36f4baebe624c18c740cd5473cf327d00a02d7a4042a5",
+   "bytes": 5265
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Mic/module_association.tsv",
+   "sha256": "f0609ad8e0f123e82bfd72d4bea54cb631eeb6ba3797a883018666cf474676be",
+   "bytes": 2657
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Mic/modules.tsv",
+   "sha256": "ec56698d4dfa6c824dcd0bd0bb7729b92a3ff21b8584f6b1aa832e8144740229",
+   "bytes": 520008
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/OPC/hub_genes.tsv",
+   "sha256": "09042eff7696d93cad6c79d9daf918c00a4ed17df1fa58119a42873ef4d8e09a",
+   "bytes": 4244
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/OPC/module_association.tsv",
+   "sha256": "7b15dff15745b0f6ff06ba648ac2c09287984babd0b7bd23119816c8f213917d",
+   "bytes": 2209
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/OPC/modules.tsv",
+   "sha256": "e895f5d2adcc77c4611ee56c41edb6bf68680d5d184dd7c82387656a9a2c59bb",
+   "bytes": 630126
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Oli/hub_genes.tsv",
+   "sha256": "cbeebf2a147dda124d5ff4de29c25087dd1c6db39543be109c23b3d992c1ed51",
+   "bytes": 2393
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Oli/module_association.tsv",
+   "sha256": "b72cb47ea4fcbba7c521d2e6feb08822520ce4bb703e25d06c0560e0955c210c",
+   "bytes": 1316
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/Oli/modules.tsv",
+   "sha256": "ae8b270cb5301c33a36a6c9242f2dbbe6132cf7899be729b8c8589f581ecb0be",
+   "bytes": 528663
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/12_coexpression/seaad_pfc_12_summary.tsv",
+   "sha256": "9e976c083f4ff10d6d6d2e52ecaff27433cf91389a84eddaba950c9af337177a",
+   "bytes": 743
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13_degas/seaad_pfc_13_celltype_summary.tsv",
+   "sha256": "cf55f21eada3e334fcd915e7ad626fff15146c14f05f139556bc21900022e26a",
+   "bytes": 610
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13_degas/seaad_pfc_13_cv_metrics.tsv",
+   "sha256": "f79b061d822706249076f1ce9ee7852b58807f760df758e72fa67a1f1728ceae",
+   "bytes": 1718
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13_degas/seaad_pfc_13_donor_association.tsv",
+   "sha256": "15eff37f90978f64d62da68cb9a98ae5b7808bcaf182d0d39e4fb8de0441a12d",
+   "bytes": 855
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13_degas/seaad_pfc_13_selected_genes.tsv",
+   "sha256": "4baa7698dd68b7cae9214000d33405bf1f90b79bb21374fb31ef1a161ce5d536",
+   "bytes": 30083
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_control_check.tsv",
+   "sha256": "dc056f98e30475a11fb588205efb9d87cefe7d5a678c606d1cb60bc29f25bec5",
+   "bytes": 305
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_genomescreen_coverage.tsv",
+   "sha256": "4ffb6acc8e56b0ba00cb701e963fdf8fbfff94d63a7bf2ead5c10ed1e590ca44",
+   "bytes": 14246
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_genomescreen_hits.tsv",
+   "sha256": "2f35a5c700d0967da6c6f747f94a83730694b1727971e47aa45c84d9d35ddbea",
+   "bytes": 70532
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_holo_structures.tsv",
+   "sha256": "726af9e2e1fe9af05de6af1c872ec30874c003a4f07624531c19dad3d1657391",
+   "bytes": 4184
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_not_scored.tsv",
+   "sha256": "36be6e2720a59448fa606cf392f4dce4f0ba6fb90aa6b1ef9db6c8c2ce0c2a6d",
+   "bytes": 77563
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_BCHE__P06276.tsv",
+   "sha256": "add7da6ae21e08aebb9eca3b54a61319ef7d7a5eab89d8913d0720d1cd8a1b11",
+   "bytes": 158975
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_CHI3L1__P36222.tsv",
+   "sha256": "53ed5135aad49f2b614dfb6bc3f056e84f1a3cf4277aaa76a960f5fd8d1d5397",
+   "bytes": 303634
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_FKBP5__Q13451.tsv",
+   "sha256": "8afc04c9d3e9487ede1f9df3a4a8d9f7735eb80abd294b3ed39cb09f9f6c462a",
+   "bytes": 159700
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_FLT1__P17948.tsv",
+   "sha256": "f7ed3b6a3447b258bfec6dfd3a268b186aa8d273f8f1901005b09a10912ed301",
+   "bytes": 117343
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_GNAS__P63092.tsv",
+   "sha256": "6daf551d80611f753f10f5336307f016c008ab69af5461abe30a2664bf054060",
+   "bytes": 222137
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_HIF3A__Q9Y2N7.tsv",
+   "sha256": "e0d26891daa5c1366268b9c1711ddb5f147ddc7f17bb00d7cfb549dc713b1aa0",
+   "bytes": 139214
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_HTR2A__P28223.tsv",
+   "sha256": "cf725d16358aa2f6ab2be6ff8f809f0002c6f75da7caf547a80d78160266e253",
+   "bytes": 156245
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_HTR2A_authors_holo.tsv",
+   "sha256": "580b3398153006106fb1d0e3494429d0d482101ead099c96d997a4da32471404",
+   "bytes": 138412
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_PFKP__Q01813.tsv",
+   "sha256": "c694113146315905087b5e385fba0814495bfed4666640361b9565e84287b6ac",
+   "bytes": 309351
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_PTPRG__P23470.tsv",
+   "sha256": "fc0671e19f785427217e30966bb084e95b23f83c642eb01f6747c9213ff30ed5",
+   "bytes": 181729
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_QDPR__P09417.tsv",
+   "sha256": "442305a96fa56a82da67b9bc5c220a3fb8362845114dbbc393009194ff4108c5",
+   "bytes": 115198
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_scores_SYT1__J3KQA0.tsv",
+   "sha256": "5d0d19467bc3d4dd211e496f54f6209486aebc6b1299ac5ec2bb88b16bf9bc97",
+   "bytes": 116092
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_target_mapping.tsv",
+   "sha256": "93ba6c6eea5eca622cddcfa34098d6689680db35d8c18c25634cce8a8144e391",
+   "bytes": 8137
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_targets.tsv",
+   "sha256": "be6c40eeadd54f0b8e3fc45c53d895e7e92f8ab5460ab2df797203a8afc2b21f",
+   "bytes": 5782
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/chembl_moa.tsv",
+   "sha256": "87998ad0b7aafcb5afc2c4a2015855f74c58f01b95cf7b6eeacfc92416ce56c5",
+   "bytes": 25201
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/target_known_actives.tsv",
+   "sha256": "06e3d24c8a165c770be7abd70a4c987d1a773ac7e3703a8d8ea0932af25a2add",
+   "bytes": 15613
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/target_opentargets.tsv",
+   "sha256": "b4554b95f20f709caaa75b91aca3a52d870c8850355265162fcf14d35b9d06ea",
+   "bytes": 25757
+  },
+  {
    "dataset": "site",
    "file": "website/index.html",
    "sha256": "4b4ff2a86f60742f7bdf7db9640417afeb417213a3c68057012595fd9ce8215a",
@@ -797,44 +1158,44 @@
   {
    "dataset": "site",
    "file": "website/methods.md",
-   "sha256": "8a190532ec900e765c97ee387a40354ee8c2cc226bb543bbd715be939dd1ed8e",
-   "bytes": 6529
+   "sha256": "285ae80a8753518a6e1db8a8482aaa880e995485c430d6c92dd5b16cdac8cffd",
+   "bytes": 7177
   },
   {
    "dataset": "site",
    "file": "website/data_dictionary.md",
-   "sha256": "32c259bf52cd83b1efadc3e3d14e283fb34371afd32c230f6c056ccd6066e794",
-   "bytes": 3227
+   "sha256": "903b083f29abcb8220c0926dbcb05c23f6fcf4b2e543a5a0a45c42ff7e7d0fa8",
+   "bytes": 3335
   },
   {
    "dataset": "site",
    "file": "website_tools/attribution.yaml",
-   "sha256": "c8f7d26e0af9695b04599a7e5c4d002fa10bbbc04c7dcf26488c824f9e2a0af4",
-   "bytes": 5666
+   "sha256": "f4af7f4761d2ce3d58b7336db7958ffd7ce6551781d35b4ad07ba19399484ac7",
+   "bytes": 7187
   },
   {
    "dataset": "site",
    "file": "website_build_inputs/gene_annotations.json",
-   "sha256": "72db80c8665a039e3228949c7ac2a7e0a1ff448c004c195259809186dac2196c",
-   "bytes": 19390766
+   "sha256": "c3d7c446474bdebc86d6fbdc49f511cb44eb9174292efe61435d5fa944aed8ac",
+   "bytes": 24136237
   },
   {
    "dataset": "site",
    "file": "website_build_inputs/structure_citations.json",
-   "sha256": "28ad907fcffcea46a76fe7a8ec50f2a5f6e93dd8a5da20a4ad8d7aaa1b4a3243",
-   "bytes": 22467
+   "sha256": "6c798afd3d58508f9d7899eb3e5c86ccc5c0848514fe4f31447585ac447f9b3a",
+   "bytes": 27745
   },
   {
    "dataset": "site",
    "file": "website_build_inputs/ligand_components.json",
-   "sha256": "bd4c29fa4ef6225d8072ccd5275049715b0f7708c6140497b87235198a143be8",
-   "bytes": 18597
+   "sha256": "2f0de0ef1976ffa88244d5297395a8ef45bb9a6818f4a27fa5fdf62d15ec689a",
+   "bytes": 22971
   },
   {
    "dataset": "site",
    "file": "website_tools/ligand_classes.yaml",
-   "sha256": "b60607d62ba4f38a3ad5414afd221c3a5c122db2dae836433c7a6f7e6862d6e1",
-   "bytes": 5306
+   "sha256": "3a65a132ba28e18fbf32e624a1d848533285268ae2ebafb31d44a8d107a48b04",
+   "bytes": 6558
   }
  ]
 }

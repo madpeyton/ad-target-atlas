@@ -1,6 +1,6 @@
 # Data dictionary
 
-Written by build_site_data.py v1.12. Main gene test: nucleus-level test (Wilcoxon, step 11b) (Green et al. 2024, Mathys et al. 2019). Tests and thresholds: [methods.md](methods.md).
+Written by build_site_data.py v1.14. Main gene test: nucleus-level test (Wilcoxon, step 11b) (Green et al. 2024, Mathys et al. 2019, SEA-AD (Gabitto et al. 2024)). Tests and thresholds: [methods.md](methods.md).
 
 ## de_genes (one row per gene and cell type; every gene tested by the main test or by the donor-level test)
 
@@ -33,14 +33,14 @@ Written by build_site_data.py v1.12. Main gene test: nucleus-level test (Wilcoxo
 | Column | Meaning | Produced by |
 |---|---|---|
 | `n_nuclei, median_score, q25, q75` | DEGAS AD-likeness score over all nuclei of the cell type | step 13 DEGAS |
-| `donor_median_AD, donor_median_control, donor_difference, direction, padj` | per-donor mean score compared between AD and control donors; Benjamini-Hochberg across cell types | step 13 Wilcoxon rank-sum across donors |
+| `donor_median_AD, donor_median_control, donor_difference, direction, pvalue, padj` | per-donor mean score compared between AD and control donors (median per group; difference = AD - control); pvalue unadjusted, padj Benjamini-Hochberg across cell types | step 13 Wilcoxon rank-sum across donors |
 | `n_donors_AD, n_donors_control` | donors in the test | step 13 |
 
 ## downloads/results.csv and results.json (one row per dataset, cell type and gene)
 
 | Column | Meaning | Produced by |
 |---|---|---|
-| `dataset` | dataset key (green = Green et al. 2024; mathys2019 = Mathys et al. 2019) | - |
+| `dataset` | dataset key (green = Green et al. 2024; mathys2019 = Mathys et al. 2019; seaad_pfc = SEA-AD, Gabitto et al. 2024) | - |
 | `cell_type, gene_symbol, gene_id` | cell type label, gene symbol as used by the dataset, Ensembl gene ID | - |
 | `gene_symbol_current` | current NCBI symbol of the Ensembl ID (the gene page's name; the dataset symbol when NCBI gives no single symbol) | MyGene.info (fetch_gene_annotations.py) |
 | `nucleus_tested` | false if the gene was detected in < 10% of the nuclei of both groups (not tested) | nucleus-level test (Wilcoxon, step 11b) |
