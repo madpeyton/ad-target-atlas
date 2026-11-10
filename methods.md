@@ -1,6 +1,6 @@
 # Methods
 
-Generated 2026-11-06 by build_site_data.py v1.14. Datasets: Green et al. 2024 (`green`); Mathys et al. 2019 (`mathys2019`); SEA-AD (Gabitto et al. 2024) (`seaad_pfc`).
+Generated 2026-11-10 by build_site_data.py v1.15. Datasets: Green et al. 2024 (`green`); Mathys et al. 2019 (`mathys2019`); SEA-AD (Gabitto et al. 2024) (`seaad_pfc`).
 
 ## Which test produced which result
 
@@ -51,6 +51,8 @@ DEGAS learns AD vs control from bulk RNA-seq of the Mount Sinai Brain Bank (MSBB
 All datasets use the same MSBB patients and the same patient folds, but each dataset's model is trained together with that dataset's nuclei and uses genes selected partly from them, so the held-out predictions and AUCs differ between datasets. Each held-out fold has only 18-19 patients, so fold AUCs vary widely; the pooled AUC is the steadier figure.
 
 Per cell type, each donor's mean nucleus score is compared between AD and control donors (Wilcoxon rank-sum); p-values are Benjamini-Hochberg adjusted across cell types.
+
+Genes that differ between nuclei with high and low DEGAS scores (step 13b): within each cell type, nuclei are split at the median score and compared with a t-test, with p-values Benjamini-Hochberg adjusted over the cell type's genes, following Johnson et al., Genome Medicine 2022 ([doi:10.1186/s13073-022-01012-2](https://doi.org/10.1186/s13073-022-01012-2)).
 
 ## Drug targets
 

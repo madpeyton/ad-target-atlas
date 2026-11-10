@@ -1,16 +1,16 @@
 {
- "last_updated": "2026-11-06",
+ "last_updated": "2026-11-10",
  "site_build": {
-  "build_site_pages": "1.12",
+  "build_site_pages": "1.13",
   "build_site_data": {
-   "green": "1.14",
-   "mathys2019": "1.14",
-   "seaad_pfc": "1.14"
+   "green": "1.15",
+   "mathys2019": "1.15",
+   "seaad_pfc": "1.15"
   }
  },
- "treatad_snrna_commit": "8cac21cb0be8540c0551579f9bf26266d91f3093",
+ "treatad_snrna_commit": "850fed287ae34c3fa6c802e043404f899abcd20c",
  "commit_note": "commit of the pipeline code repository when the site was built; it may not match the code version that produced the results",
- "inputs_sha256_combined": "9061d3ad7046ce4e426b8e7ccc063197828ded4aedacbf96f4a8e51b04bc90ca",
+ "inputs_sha256_combined": "4c86113b728ff46a93148a8847222ee03a61a04475b80a28daf4699ee9837b61",
  "skipped_datasets": [],
  "license": "CC BY-NC 4.0",
  "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
@@ -18,8 +18,8 @@
   {
    "dataset": "green",
    "file": "config/green.yaml",
-   "sha256": "efc9303b63333f726a1c5df496cec41e3dba94cb23173b89b80cfc86993443c6",
-   "bytes": 10131
+   "sha256": "302cea4ff3fb24addd03d27b252864e15605761570835284b8c1a0c8b848abf3",
+   "bytes": 10139
   },
   {
    "dataset": "green",
@@ -272,6 +272,48 @@
    "file": "website_build_inputs/green/13_degas/green_13_selected_genes.tsv",
    "sha256": "3a61b9f10c479824721a00520f76d6106237796384c3870ea466ba197cc023cf",
    "bytes": 29841
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13b_degas_de/Astrocytes/de_results.tsv",
+   "sha256": "98796cca27f933af6a8e1821467ab404a35a7e244e776cdbe2dba06c3ffdd111",
+   "bytes": 1090239
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13b_degas_de/CUX2+/de_results.tsv",
+   "sha256": "e0fe0ec6d7c321c38c6ce26a5d8d59bb75298a163dd9c0f4ad996dcac5a05662",
+   "bytes": 1521608
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13b_degas_de/CUX2-/de_results.tsv",
+   "sha256": "6d633c61e2617e60a7a2ce98540e2edb9032c996f41c9334d7c3c0d6d58ff3b3",
+   "bytes": 1530944
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13b_degas_de/Inhibitory/de_results.tsv",
+   "sha256": "30740d6411dc0edf0d66bd9418dfed3b406672065bc35c940c055f43ff42c70c",
+   "bytes": 1328332
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13b_degas_de/Microglia/de_results.tsv",
+   "sha256": "733d2f091738ffc4af7b3ce96e4fa73c6f5ad58e4b71f349949c76d827350a05",
+   "bytes": 797226
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13b_degas_de/Oligodendroglia/de_results.tsv",
+   "sha256": "c3de9ce431f76bc0054fb288fb38401432b2c78a8d0a48f176d65b7be8628e6e",
+   "bytes": 907599
+  },
+  {
+   "dataset": "green",
+   "file": "website_build_inputs/green/13b_degas_de/Vascular.niche/de_results.tsv",
+   "sha256": "ad9c32fd47a04e4a0966d4355aeb308a8b080ce2afd2512ea146308d79ea26fc",
+   "bytes": 1114205
   },
   {
    "dataset": "green",
@@ -635,6 +677,42 @@
   },
   {
    "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13b_degas_de/Ast/de_results.tsv",
+   "sha256": "71347ceef9beee9e89e161432aabcd463223879bf0b8cf3174b7e28406dbdf9f",
+   "bytes": 433571
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13b_degas_de/Ex/de_results.tsv",
+   "sha256": "6cc8cae463e0808d323564f29bbbb8b6ada4f34234c72fc92e107ae4ce02c9a3",
+   "bytes": 1225442
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13b_degas_de/In/de_results.tsv",
+   "sha256": "7b3152f3286a229dc6b988f478a55b46659bc14bae632d5787a91c62dd4625ad",
+   "bytes": 928814
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13b_degas_de/Mic/de_results.tsv",
+   "sha256": "9e697d460afb5f426c5422f9cf91dc53406b1d43b186248761b0d5ed00901c58",
+   "bytes": 215769
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13b_degas_de/OPC/de_results.tsv",
+   "sha256": "2d36e473e5b6e1b9be9a9d426c4a333b168a7de0cf16043c59bfc6bd4cc2bfe6",
+   "bytes": 513721
+  },
+  {
+   "dataset": "mathys2019",
+   "file": "website_build_inputs/mathys2019/13b_degas_de/Oli/de_results.tsv",
+   "sha256": "157d51f63c9fbb76eedf574012eb7876ad869a799068e5b4ed9d83d1fcb35648",
+   "bytes": 226884
+  },
+  {
+   "dataset": "mathys2019",
    "file": "website_build_inputs/mathys2019/14_drugclip/mathys2019_14_control_check.tsv",
    "sha256": "dc056f98e30475a11fb588205efb9d87cefe7d5a678c606d1cb60bc29f25bec5",
    "bytes": 305
@@ -792,8 +870,8 @@
   {
    "dataset": "seaad_pfc",
    "file": "config/seaad_pfc.yaml",
-   "sha256": "a5fe7f26dacb5887978f58ae70275a9a32ab44d520ef65d74f9174ef5f137a4d",
-   "bytes": 7201
+   "sha256": "5d486b62424aebd63ef4fd6baa7e3da1b233511f6be8c54df311eb54082af089",
+   "bytes": 7205
   },
   {
    "dataset": "seaad_pfc",
@@ -1019,6 +1097,42 @@
   },
   {
    "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13b_degas_de/Ast/de_results.tsv",
+   "sha256": "d9d8133c351b242ee7b6ba8f109102eb6fc9e03e23af66bfc12526ded66e18bc",
+   "bytes": 1354763
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13b_degas_de/Ex/de_results.tsv",
+   "sha256": "bb819fc6b8a7310f9306afebd3f2f6f201fd112303d8f4dab8838239138038e3",
+   "bytes": 1799943
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13b_degas_de/In/de_results.tsv",
+   "sha256": "f1eb098ce3101f1057b1ed21ad089b52230e1363029c995c2dde3d256f07440d",
+   "bytes": 1565444
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13b_degas_de/Mic/de_results.tsv",
+   "sha256": "1cf2ce05898fe7e062646ebb4bbc3381f370ebdeb0e997c0f804673660df1254",
+   "bytes": 1039013
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13b_degas_de/OPC/de_results.tsv",
+   "sha256": "0fb1bcc742ea7dcb77fd2649cb2a1b9dadb1f6fdc31d011e5586f7f598547887",
+   "bytes": 1375539
+  },
+  {
+   "dataset": "seaad_pfc",
+   "file": "website_build_inputs/seaad_pfc/13b_degas_de/Oli/de_results.tsv",
+   "sha256": "00aba68ff6287fe8fb476f4c9bc769de89174e5d878ad7ea06958b05d909fd68",
+   "bytes": 1101707
+  },
+  {
+   "dataset": "seaad_pfc",
    "file": "website_build_inputs/seaad_pfc/14_drugclip/seaad_pfc_14_control_check.tsv",
    "sha256": "dc056f98e30475a11fb588205efb9d87cefe7d5a678c606d1cb60bc29f25bec5",
    "bytes": 305
@@ -1152,20 +1266,20 @@
   {
    "dataset": "site",
    "file": "website/index.html",
-   "sha256": "4b4ff2a86f60742f7bdf7db9640417afeb417213a3c68057012595fd9ce8215a",
-   "bytes": 91934
+   "sha256": "ff7587c1e3229e99116e57ac361297419b1a2463b132df6bc74032e66b98875b",
+   "bytes": 92921
   },
   {
    "dataset": "site",
    "file": "website/methods.md",
-   "sha256": "285ae80a8753518a6e1db8a8482aaa880e995485c430d6c92dd5b16cdac8cffd",
-   "bytes": 7177
+   "sha256": "1d304b75d1d1fbf20166b9c358bab68f82de8673884975ba8f0ef9e303a7970e",
+   "bytes": 7539
   },
   {
    "dataset": "site",
    "file": "website/data_dictionary.md",
-   "sha256": "903b083f29abcb8220c0926dbcb05c23f6fcf4b2e543a5a0a45c42ff7e7d0fa8",
-   "bytes": 3335
+   "sha256": "1595806ec9a49a5f5a096e990d1011cf9ff9b4a3243efe72e6a9c1c90c480f4c",
+   "bytes": 4004
   },
   {
    "dataset": "site",

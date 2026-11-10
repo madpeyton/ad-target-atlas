@@ -2449,6 +2449,7 @@
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/AC064807.2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/AC064807.3/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/AC064807.4/</loc></url>
+<url><loc>https://madpeyton.github.io/ad-target-atlas/genes/AC064829.1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/AC064834.1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/AC064836.2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/AC064836.3/</loc></url>
@@ -14914,6 +14915,7 @@
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/IFIT2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/IFIT3/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/IFIT5/</loc></url>
+<url><loc>https://madpeyton.github.io/ad-target-atlas/genes/IFITM1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/IFITM10/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/IFITM2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/IFITM3/</loc></url>
@@ -20110,6 +20112,7 @@
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/MPV17L2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/MPZ/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/MPZL1/</loc></url>
+<url><loc>https://madpeyton.github.io/ad-target-atlas/genes/MPZL2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/MPZL3/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/MR1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/MRAP/</loc></url>
@@ -25189,6 +25192,7 @@
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SEMA3E/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SEMA3F/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SEMA3F-AS1/</loc></url>
+<url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SEMA3G/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SEMA4A/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SEMA4B/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SEMA4C/</loc></url>
@@ -26353,6 +26357,7 @@
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SOX12/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SOX13/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SOX15/</loc></url>
+<url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SOX17/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SOX18/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SOX2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/SOX2-OT/</loc></url>
@@ -29073,6 +29078,7 @@
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/VAX1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/VAX2/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/VBP1/</loc></url>
+<url><loc>https://madpeyton.github.io/ad-target-atlas/genes/VCAM1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/VCAN/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/VCAN-AS1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/VCF1/</loc></url>
@@ -29804,6 +29810,7 @@
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/ZHX3/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/ZIC1/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/ZIC2/</loc></url>
+<url><loc>https://madpeyton.github.io/ad-target-atlas/genes/ZIC3/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/ZIC4/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/ZIC5/</loc></url>
 <url><loc>https://madpeyton.github.io/ad-target-atlas/genes/ZIK1/</loc></url>

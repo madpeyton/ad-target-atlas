@@ -1,8 +1,8 @@
 <!doctype html>
 <!--
   filename: index.html
-  date: 2026-10-21
-  version: 1.19
+  date: 2026-11-10
+  version: 1.20
   description: TREAT-AD results explorer. A single static page (no build step, no server, no external
     libraries) that shows the gene and drug candidates of the TREAT-AD v2 pipeline for one dataset.
     Data: data/datasets.js lists the datasets; data/<dataset>/{meta,de_genes,modules,degas,targets,drugs,annotations}.js
@@ -59,6 +59,9 @@
     v1.19: American spelling in the page's own text (color, license, catalog, summarizes, neighbors, gray); short
     labels for the reworded "not scored" reasons (build_site_data v1.11); print stylesheet: wide tables wrap instead of
     being clipped when printed or saved as PDF.
+  v1.20: gene tables (gene and cell-type views) add "High vs low DEGAS log2FC" and "High vs low DEGAS adjusted p"
+    (data fields degas_log2fc / degas_padj, build v1.15: step 13b, nuclei above vs at or below the cell type's
+    median DEGAS score, t-test, Benjamini-Hochberg; empty when step 13b did not test the gene).
 -->
 <html lang="en">
 <head>
@@ -584,6 +587,13 @@ function deColumns(first) {
       { label: "% nuclei control", note: "Share of this cell type's nuclei from control donors with at least one UMI count of the gene.", cls: "num",
         text: function (r) { return fmtPct(r.pct_control); }, value: function (r) { return r.pct_control; } });
   }
+  cols.push(
+    { label: "High vs low DEGAS log2FC", cls: "num", note: "Within this cell type, nuclei with DEGAS scores above the " +
+        "median compared with the rest: log2 fold change, high vs low. Empty when not tested.",
+      text: function (r) { return fmtNum(r.degas_log2fc); }, value: function (r) { return r.degas_log2fc; } },
+    { label: "High vs low DEGAS adjusted p", cls: "num", note: "Adjusted p-value of the high vs low DEGAS score " +
+        "comparison (t-test, Benjamini-Hochberg over the cell type's genes). Empty when not tested.",
+      text: function (r) { return fmtP(r.degas_padj); }, value: function (r) { return r.degas_padj; } });
   return cols;
 }
 
@@ -1428,7 +1438,7 @@ function init(ds, list) {
 start();
 </script>
 <footer style="font-size:12.5px;color:#5f5e5a;max-width:1100px;margin:24px auto;padding:0 16px"><div class="wrap">
-<p>build_site_pages v1.12, build_site_data green v1.14, mathys2019 v1.14, seaad_pfc v1.14 · treatad-snrna commit 8cac21cb0be8 (code commit when the site was built; it may not match the code that produced the results) · inputs sha256 9061d3ad7046 (<a href="downloads/stamp.json">full list</a>)</p>
+<p>build_site_pages v1.13, build_site_data green v1.15, mathys2019 v1.15, seaad_pfc v1.15 · treatad-snrna commit 850fed287ae3 (code commit when the site was built; it may not match the code that produced the results) · inputs sha256 4c86113b728f (<a href="downloads/stamp.json">full list</a>)</p>
 <p>License: <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. Computational predictions to guide follow-up experiments, not validated targets or treatments.</p>
 </div></footer>
 </body>

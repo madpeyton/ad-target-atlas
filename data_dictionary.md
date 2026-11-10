@@ -1,6 +1,6 @@
 # Data dictionary
 
-Written by build_site_data.py v1.14. Main gene test: nucleus-level test (Wilcoxon, step 11b) (Green et al. 2024, Mathys et al. 2019, SEA-AD (Gabitto et al. 2024)). Tests and thresholds: [methods.md](methods.md).
+Written by build_site_data.py v1.15. Main gene test: nucleus-level test (Wilcoxon, step 11b) (Green et al. 2024, Mathys et al. 2019, SEA-AD (Gabitto et al. 2024)). Tests and thresholds: [methods.md](methods.md).
 
 ## de_genes (one row per gene and cell type; every gene tested by the main test or by the donor-level test)
 
@@ -18,6 +18,7 @@ Written by build_site_data.py v1.14. Main gene test: nucleus-level test (Wilcoxo
 | `donor_level` | whether the donor-level DESeq2 Wald statistic points the same way as the main test (nucleus-level main test only); 'not tested' if the gene is absent from step 11 | donor-level test (pseudobulk DESeq2, step 11) |
 | `donor_test` | 'significant' (padj < 0.05), 'not significant', 'filtered (low counts, not tested at FDR)' (DESeq2 independent filtering left padj empty) or 'not tested' (gene removed by step 11's pre-filter) | donor-level test (pseudobulk DESeq2, step 11) |
 | `nucleus_tested` | false for genes tested only by the donor-level test (nucleus-level fields then read 'not tested (detected in < 10% of nuclei)' and carry no numbers; donor_level then gives the donor-level direction itself) | nucleus-level test (Wilcoxon, step 11b) detection filter |
+| `degas_log2fc, degas_padj` | nuclei with high vs low DEGAS scores (split at the cell type's median score): log2 fold change (high vs low) and Benjamini-Hochberg adjusted p-value; empty when not tested | step 13b t-test |
 
 ## modules (one row per co-expression module and cell type)
 
@@ -35,6 +36,13 @@ Written by build_site_data.py v1.14. Main gene test: nucleus-level test (Wilcoxo
 | `n_nuclei, median_score, q25, q75` | DEGAS AD-likeness score over all nuclei of the cell type | step 13 DEGAS |
 | `donor_median_AD, donor_median_control, donor_difference, direction, pvalue, padj` | per-donor mean score compared between AD and control donors (median per group; difference = AD - control); pvalue unadjusted, padj Benjamini-Hochberg across cell types | step 13 Wilcoxon rank-sum across donors |
 | `n_donors_AD, n_donors_control` | donors in the test | step 13 |
+
+## degas.high_low (one row per cell type)
+
+| Column | Meaning | Produced by |
+|---|---|---|
+| `genes_tested, n_higher, n_lower` | genes tested, and genes higher or lower in nuclei with high DEGAS scores than in nuclei with low scores (adjusted p < 0.05) | step 13b t-test |
+| `top_higher` | the top 10 genes higher in high-score nuclei (symbol, Ensembl gene ID, log2 fold change, adjusted p), by adjusted p, then t statistic | step 13b t-test |
 
 ## downloads/results.csv and results.json (one row per dataset, cell type and gene)
 
@@ -54,8 +62,9 @@ Written by build_site_data.py v1.14. Main gene test: nucleus-level test (Wilcoxo
 | `donor_padj` | Benjamini-Hochberg adjusted p-value with DESeq2 independent filtering (empty when filtered) | donor-level test (pseudobulk DESeq2, step 11) |
 | `donor_log2fc, donor_lfcse` | unshrunk log2 fold change, AD vs control, and its standard error | donor-level test (pseudobulk DESeq2, step 11) |
 | `donor_log2fc_shrunk` | apeglm-shrunk log2 fold change (used to pick drug targets when de_source is pseudobulk) | donor-level test (pseudobulk DESeq2, step 11) |
+| `degas_log2fc, degas_padj` | nuclei with high vs low DEGAS scores, split at the cell type's median score: log2 fold change (high vs low) and Benjamini-Hochberg adjusted p-value over the cell type's genes (empty when not tested) | high vs low DEGAS score test (t-test, step 13b) |
 
-## Gene pages: table "Change in AD by cell type" (genes/<SYMBOL>/)
+## Gene pages: tables "Change in AD by cell type" and "Nuclei with high vs low DEGAS scores" (genes/<SYMBOL>/)
 
 | Column | Meaning | Produced by |
 |---|---|---|
@@ -68,3 +77,4 @@ Written by build_site_data.py v1.14. Main gene test: nucleus-level test (Wilcoxo
 | Donor-level (pseudobulk) test | donor_test | donor-level test (pseudobulk DESeq2, step 11) |
 | Donor-level log2FC (SE) | the UNSHRUNK DESeq2 log2 fold change, AD vs control (donor_log2fc), followed by its standard error in parentheses (donor_lfcse); not shrunk, not a confidence interval | donor-level test (pseudobulk DESeq2, step 11) |
 | Donor-level adjusted p | donor_padj (empty when filtered) | donor-level test (pseudobulk DESeq2, step 11) |
+| Nuclei with high vs low DEGAS scores: log2 fold change, adjusted p (separate table) | degas_log2fc, degas_padj; only cell types where the gene was tested | high vs low DEGAS score test (t-test, step 13b) |
